@@ -43,7 +43,7 @@ build/
 /mobile/output
 /smarttubemobile/release
 # Firebase app configuration is supplied per checkout and must not be committed.
-mobile/google-services.json
+#mobile/google-services.json
 *.hprof
 log.txt
 android.keystore

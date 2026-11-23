@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "476032408796",
+    "firebase_url": "https://hindyou-default-rtdb.firebaseio.com",
+    "project_id": "hindyou",
+    "storage_bucket": "hindyou.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476032408796:android:be9cf46eead5c97213e819",
+        "android_client_info": {
+          "package_name": "io.yash.meetube"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476032408796-a3eu4raao6nj037ra4p8nfgqkss80mla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyyws62Xu9o9w5uoA7AjRZqauVOHgG56M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476032408796-a3eu4raao6nj037ra4p8nfgqkss80mla.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
