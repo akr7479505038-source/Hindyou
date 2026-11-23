@@ -238,7 +238,7 @@ final class MeeTuneSettings {
         karaoke();
 
         // The way back to MeeTube, as MeeTube's settings end with "MeeTune →".
-        mRoot.addView(MeeTune.switchLink(mActivity, getString(R.string.meetune_link_meetube),
+        mRoot.addView(MeeTune.switchLink(mActivity, getString(R.string.meetune_link_hindyou),
                 v -> MeeTune.leave(mActivity)));
     }
 

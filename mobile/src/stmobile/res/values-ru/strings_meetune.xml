@@ -101,7 +101,7 @@
     <string name="meetune_eq_system_summary">Системная панель эквалайзера телефона</string>
     <string name="meetune_eq_system_none">На этом телефоне нет панели эквалайзера</string>
     <string name="meetune_eq_system_note">Обрабатывает звук после эквалайзера MeeTune, на уровне телефона. При включении обоих применяются обе настройки.</string>
-    <string name="meetune_link_meetube">MeeTube →</string>
+    <string name="meetune_link_hindyou">HindYou →</string>
     <string name="meetune_link_meetune">MeeTune →</string>
     <string name="meetune_home_hint">Нажмите на значок, чтобы перейти в MeeTune</string>
     <string name="meetune_meetube_hint">Нажмите на значок, чтобы перейти в MeeTube</string>
