@@ -1,6 +1,7 @@
 package com.newtube.mobile.ui.settings;
 
 import android.content.Context;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -79,6 +80,12 @@ final class AppPages {
         rows.add(SettingsRow.toggle(context.getString(R.string.mobile_settings_indian_counts),
                 context.getString(R.string.mobile_settings_indian_counts_summary),
                 () -> CountStyle.isIndian(context), on -> CountStyle.setIndian(context, on)).needsRestart());
+
+        rows.add(SettingsRow.action(context.getString(R.string.mobile_settings_version),
+                SettingsPages.versionLine(context), page -> { }));
+        if (Build.VERSION.SDK_INT >= 26) {
+            rows.add(SettingsRow.page(context.getString(R.string.mobile_settings_tv_title), null, SettingsPages.TV_INSTALL));
+        }
 
         // MEETUBE(performance): every screen at the display's top refresh rate (BitChord's setting).
         rows.add(SettingsRow.header(context.getString(R.string.mobile_settings_performance)));

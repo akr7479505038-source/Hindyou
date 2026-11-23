@@ -371,6 +371,14 @@ public class MobileBrowseActivity extends MobileActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Existing task stacks may restore this pre-Firebase home after an app update.
+        // Route them into the new channel rather than reopening the YouTube-backed feed.
+        startActivity(new Intent(this, FirebaseVideosActivity.class));
+        finish();
+        return;
+    }
+
+    private void initializeLegacyBrowse(Bundle savedInstanceState) {
         com.newtube.mobile.ui.common.ShortsSeen.load(this); // MEETUBE(shorts): before the feed is filtered
 
         // Transitions: same task as the player now (singleTop + reorder, see the manifest note).
@@ -2485,20 +2493,6 @@ public class MobileBrowseActivity extends MobileActivity
             addYouSectionRows(explore, 4);
         }
 
-        // MEETUBE(you page): a tiny faint link at the very bottom to About
-        TextView about = new TextView(this);
-        about.setText(R.string.mobile_you_about);
-        about.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 9);
-        about.setTextColor(getColor(R.color.mobile_color_on_surface)); // the theme's text, faint: both themes
-        about.setAlpha(0.4f);
-        about.setLetterSpacing(0.08f);
-        about.setGravity(android.view.Gravity.CENTER);
-        int pad = Math.round(14 * getResources().getDisplayMetrics().density);
-        about.setPadding(pad, pad * 2, pad, pad);
-        about.setOnClickListener(v -> startActivity(com.newtube.mobile.ui.settings.MobileSettingsActivity.intent(this,
-                com.newtube.mobile.ui.settings.SettingsPages.ABOUT)));
-        mYouRows.addView(about, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     /**

@@ -17,12 +17,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication;
-import com.liskovsoft.youtubeapi.app.AppServiceIntCached;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoService;
 import com.newtube.mobile.ui.adddevice.MobileAddDeviceActivity;
@@ -31,61 +28,21 @@ import com.newtube.mobile.ui.channel.MobileChannelActivity;
 import com.newtube.mobile.ui.channel.MobileChannelUploadsActivity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.newtube.mobile.ui.common.FeedCache;
 import com.newtube.mobile.ui.common.ThemeMode;
 import com.newtube.mobile.ui.dialog.MobileAppDialogActivity;
 import com.newtube.mobile.ui.playback.MobilePlaybackActivity;
 import com.newtube.mobile.ui.playback.SystemPipBridge;
 import com.newtube.mobile.ui.search.MobileSearchActivity;
 import com.newtube.mobile.ui.settings.MobileSettingsActivity;
-import com.newtube.mobile.ui.signin.MobileSignInActivity;
 import com.newtube.mobile.ui.webbrowser.MobileWebBrowserActivity;
 
 /**
- * stmobile flavor application class.
- *
- * Wave 1 vertical slice: keep every existing TV init (GlobalPreferences, exception
- * handler, the full {@link ViewManager} mapping for every other screen) by calling
- * {@code super.onCreate()}, then re-point only the {@link BrowseView} (Home) mapping
- * at the touch {@link MobileBrowseActivity}.
- *
- * Wave 2: also re-point the {@link PlaybackView} mapping at the touch
- * {@link MobilePlaybackActivity}. Without this, {@code PlaybackView} would still
- * resolve to the inherited TV mapping ({@code MainApplication.setupViewManager()}
- * registers it as {@code PlaybackView -> PlaybackActivity (Leanback), parent
- * BrowseActivity (Leanback)}), so tapping a video card would launch the Leanback
- * player on a touch phone instead of the new touch one.
- *
- * Wave 3: also re-point the {@link AppDialogView} mapping at the touch
- * {@link MobileAppDialogActivity} (parent: {@link MobileBrowseActivity}, mirroring TV's
- * {@code AppDialogView -> AppDialogActivity, parent BrowseActivity}). Without this override
- * every settings screen and every long-press context menu - which all funnel through
- * {@code AppDialogPresenter} - would still launch the Leanback {@code AppDialogActivity}.
- *
-
- * NOTE: We also re-point {@link ViewManager#setRoot}. The TV {@code MainApplication}
- * sets the root activity to the Leanback {@code BrowseActivity} inside
- * {@code setupViewManager()}. {@code ViewManager.startDefaultView()} (used by
- * {@code SplashPresenter}'s "last resort" intent-chain handler, i.e. a normal cold
- * launch from the launcher icon) falls back directly to that root Activity class -
- * not through the {@link #register} mapping - so without this override a fresh
- * install would briefly launch the Leanback Home before anything touch-specific ever
- * runs.
+ * stmobile application class. Retains the shared settings and playback infrastructure while
+ * routing the phone's public-video home to the Firebase-backed channel.
  */
 public class MobileMainApplication extends MainApplication {
-    /** BotGuard warmup for a process whose first Activity never draws (see onCreate). */
-    private static final long TOKEN_WARMUP_FALLBACK_MS = 4_000;
     /** Held here: AppPrefs keeps its profile listeners weakly. */
     private PhoneOnlyPrefs mPhoneOnlyPrefs;
-    /**
-     * NEWTUBE(token-warmup): the static switch. true = the BotGuard warm-up (and the WEB
-     * enrichment that would build the WebView on its own) waits for the open in flight to show its
-     * first frame or fail; false = the warm-up runs after the first screen's frame, as in v20.
-     * Debug and benchmark builds: setprop debug.arc.token_warmup frame (rollback) | open.
-     */
-    private static final boolean TOKEN_WARMUP_AFTER_OPEN = true;
-    /** The longest a WEB enrichment waits for the open's first frame. */
-    private static final long ENRICHMENT_MAX_HOLD_MS = 4_000;
     /**
      * NEWTUBE(wall-memory): the answer to the one-minute wall's "Unknown source error" (r11: a walled
      * visitor's VISIONOS and ANDROID_VR media 403 at 60.0 s; the recovery alternated them to the
@@ -175,30 +132,6 @@ public class MobileMainApplication extends MainApplication {
                                 (com.google.android.material.dialog.MaterialAlertDialogBuilder) builder);
                     }
                 };
-        // Optional WEB auth: installing the bridge does not load WebView or construct OkHttp.
-        com.liskovsoft.youtubeapi.web.WebSession.setCookieStore(new com.liskovsoft.youtubeapi.web.CookieStore() {
-            @Override public String get(String url) {
-                return android.webkit.CookieManager.getInstance().getCookie(url);
-            }
-            @Override public void put(String url, String setCookie) {
-                android.webkit.CookieManager manager = android.webkit.CookieManager.getInstance();
-                manager.setCookie(url, setCookie);
-                manager.flush();
-            }
-        });
-        com.newtube.mobile.ui.signin.WebSignInState.restore(this);
-        com.liskovsoft.youtubeapi.web.WebSession.setOnRejected(() ->
-                com.newtube.mobile.ui.signin.WebSignInState.clear(this));
-        // The shell-protected benchmark fixture uses only bundled media. Suppress speculative
-        // server warmups for that offline run; production builds never enable this path.
-        boolean offlineBenchmark = (com.liskovsoft.smartyoutubetv2.tv.BuildConfig.BENCHMARK
-                || com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG)
-                && "1".equals(getDebugSystemProperty("debug.arc.benchmark_fixture"));
-        // 403 playground: keep the persisted-app-info optimization independently switchable.
-        // This must be read before the first AppService access; no user data is cleared.
-        boolean forceFreshAppInfo = com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG
-                && "1".equals(getDebugSystemProperty("debug.arc.fresh_app_info"));
-
         // BENCHMARK ACCOUNT GUARD: a benchmark build never writes to the signed-in account's watch
         // history (watch-time pings, pause/resume/clear). The signed-in /player benchmark runs on
         // the owner's own account (-PsideBySide=auth, his OK 2026-09-29), and signing in used to
@@ -246,11 +179,6 @@ public class MobileMainApplication extends MainApplication {
         // instead of opening (and re-preparing) the same video again.
         com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter.setPlayingReturn(
                 tapped -> com.newtube.mobile.ui.playback.PlayingReturn.bringToFront(this, tapped));
-
-        // Settings > About ends with "Star NewTube on GitHub" and "Share NewTube" (phone strings,
-        // so the rows are built here, not in the shared presenter).
-        com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSimpleSettingsPresenter.setPhoneExtraRows(
-                com.newtube.mobile.ui.about.AboutShareRows::create);
 
         // NETWORK FORENSICS (mobile-only): observe default-network replacements/capability changes
         // so a Wi-Fi -> 5G transition can be correlated with URL remints, media errors and ABR
@@ -504,13 +432,7 @@ public class MobileMainApplication extends MainApplication {
                 android.util.Log.w("NetPath", "bench supportXhr override=" + supportXhr);
             }
 
-            // TTFF PLAYGROUND (debug builds only): "0" restores warming the media host only after
-            // the signature transform. Lets both arms of a paired A/B run from ONE apk - an install
-            // between arms takes long enough that the cellular link itself moves.
-            if ("0".equals(getDebugSystemProperty("debug.arc.early_preconnect"))) {
-                com.liskovsoft.youtubeapi.common.helpers.MediaHostPreconnect.setEarlyEnabled(false);
-                android.util.Log.w("NetPath", "early media-host preconnect disabled (debug)");
-            }
+            com.liskovsoft.youtubeapi.common.helpers.MediaHostPreconnect.setEarlyEnabled(false);
 
             // Same idea for the retained signature-solver runtime.
             if ("0".equals(getDebugSystemProperty("debug.arc.keep_sig_runtime"))) {
@@ -801,9 +723,8 @@ public class MobileMainApplication extends MainApplication {
                 });
         // MEETUBE(update notify): a new version shows up in the notification shade, app closed or not
         com.newtube.mobile.update.UpdateNotifyWorker.schedule(this);
-        // MEETUBE(issue #220): new uploads from subscriptions in the notification shade
-        com.newtube.mobile.notify.NewUploadsWorker.schedule(this);
-
+        // Remove the previous YouTube-subscription polling job from upgraded installs.
+        com.newtube.mobile.notify.NewUploadsWorker.setEnabled(this, false);
         // FEED FIRST-PAINT (mobile-only, round 2): Home's eager row-pad continuations exist to
         // fill short TV shelf rows to MIN_ROW_GROUP_SIZE=5; the phone flattens every row into one
         // grid, so they were ~6 invisible serial /browse continuations (~350KB) racing the first
@@ -838,15 +759,8 @@ public class MobileMainApplication extends MainApplication {
             android.util.Log.w("NetPath", "shelf tail disabled (debug)");
         }
 
-        // FEED LAUNCH (mobile-only, round 3): Splash starts Home's first /browse the moment it
-        // decides to open Home, instead of 150-360 ms later from the Browse Activity (see
-        // BrowsePresenter.prefetchBootSection). Debug A/B: setprop debug.arc.home_prefetch 0.
-        boolean noHomePrefetch = com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG
-                && "0".equals(getDebugSystemProperty("debug.arc.home_prefetch"));
-        com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter.setBootPrefetchEnabled(!noHomePrefetch);
-        if (noHomePrefetch) {
-            android.util.Log.w("NetPath", "home boot prefetch disabled (debug)");
-        }
+        // The mobile home now reads public videos from Firebase, not InnerTube.
+        com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter.setBootPrefetchEnabled(false);
 
         // API COMPRESSION (mobile-only): negotiate brotli for InnerTube JSON (feeds are the big
         // payloads — br is ~15-25% smaller than gzip on them). Upstream flip-flopped `br` four
@@ -861,8 +775,8 @@ public class MobileMainApplication extends MainApplication {
         // construction) instead of running strictly after it. The single-flight below makes the player's
         // own end-of-onCreate fetch reuse this in-flight request rather than issue a second round-trip.
         // Both are off on TV -> TV click-to-play path unchanged.
-        PlaybackPresenter.setPrefetchOnOpenEnabled(true);
-        YouTubeMediaItemService.setSingleFlightEnabled(true);
+        PlaybackPresenter.setPrefetchOnOpenEnabled(false);
+        YouTubeMediaItemService.setSingleFlightEnabled(false);
 
         // TTFF FIX (mobile-only, media network): the moment format info arrives - while the player is
         // still inflating / building the manifest - open a throwaway request to the per-video
@@ -870,29 +784,13 @@ public class MobileMainApplication extends MainApplication {
         // DNS + TLS/QUIC handshake is already done when the first real segment request goes out.
         // Covers Home taps (A2 prefetch), related-video taps and queue loads (all format fetches
         // funnel through the same choke point). TV never calls this.
-        YouTubeMediaItemService.setPreconnectMediaHost(true);
+        YouTubeMediaItemService.setPreconnectMediaHost(false);
 
         // NOTE(perf history): a head-of-stream segment prefetch into the disk cache was tried here
         // and REMOVED - a cold-cache A/B showed no TTFF win (median +339ms WORSE with it on: the
         // starting player bypasses cache spans the prefetcher still holds and re-downloads the same
         // bytes). The screensaver is also absent on mobile entirely: MobileActivity's
         // createScreensaverManager() returns null (no idle dim, no dim overlay in the hierarchy).
-
-        // TTFF FIX (mobile-only, cold-start network): reuse the persisted, extractor-validated app info
-        // (playerUrl/clientUrl/visitorData) at cold process start while it's inside the 10h refresh
-        // window, instead of re-fetching youtube.com serially inside the FIRST getVideoInfo of every
-        // process. Same playerUrl also means the persisted player-JS/nsig extractor cache stays hot, so
-        // the two heaviest cold-start fetches skip together. Self-healing (persisted copy is nulled when
-        // its playerUrl stops validating). TV never calls this -> TV fetch behavior unchanged.
-        AppServiceIntCached.setPersistedAppInfoEnabled(!forceFreshAppInfo);
-
-        // SIGN-IN FIX (mobile-only): on a phone the device-code approval happens in a browser on
-        // the SAME device, so the sign-in poll completes while NewTube is backgrounded and the TV
-        // flow's follow-up account-picker startActivity is silently blocked by Android 10+
-        // background-start rules - the app looked like sign-in did nothing. Skip the picker (the
-        // account is auto-selected on token persist) and toast instead; Home refreshes itself via
-        // the account-change listener chain. TV keeps the picker.
-        YTSignInPresenter.setSilentSuccessEnabled(true);
 
         // NOTE(audio default): multi-audio (dubbed) videos defaulting to the ORIGINAL track moved
         // into the media3 engine (Media3TrackAdapter.setPreferOriginalAudio, wired by
@@ -908,73 +806,6 @@ public class MobileMainApplication extends MainApplication {
         // These are the same synchronized singletons used by real playback; this sends no extra
         // player/media request and owns no Activity, Surface, decoder or playback session.
         com.newtube.mobile.player.PlayerInfrastructureWarmup.start(this);
-
-        // WEB PO-TOKEN WARMUP (mobile-only): initialize WebView/BotGuard at app start so the first
-        // web-family /player request does not pay the ~1.5-2.5s cold cost. Tokens remain scoped to
-        // Web clients: a BotGuard token cannot attest ANDROID_VR/TV/IOS and must not be appended as
-        // a cross-platform media-URL fallback. TV never calls this.
-        // Start only AFTER the persisted-app-info and HTTP/2 flags above: its background thread
-        // immediately reads AppService.visitorData and can initialize the shared HTTP client.
-        // Starting it earlier raced both options, potentially paying a cold app-info fetch and
-        // retaining an HTTP/1.1-only connection pool for the entire process.
-        // Measurement only: defer this speculative initialization to its existing demand path.
-        // VISIONOS/ANDROID_VR also initialize this generator to obtain their existing visitor,
-        // even when no token is sent, so disabling eagerness can delay their first /player too.
-        // The flag changes no client, visitor source, credential, or request-token policy.
-        boolean deferEagerTokenWarmup = com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG
-                && "off".equals(getDebugSystemProperty("debug.arc.eager_token_warmup"));
-        if (deferEagerTokenWarmup || offlineBenchmark) {
-            android.util.Log.d("NetPath", "startup token-warmup deferred (debug; demand initialization retained)");
-        } else {
-            if (com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG) {
-                android.util.Log.d("NetPath", "startup token-warmup scheduled");
-            }
-            // NEWTUBE(startup): ...but not before the first screen has drawn. The warmup thread
-            // posts the BotGuard WebView construction to the MAIN thread, and at app start that
-            // message lands right behind SplashActivity.onCreate - i.e. in front of the next
-            // Activity's creation. A Pixel 9 sampling trace of a cold share-link open shows it
-            // there: 89 ms of PoTokenWebView init on the main thread between Splash and
-            // MobilePlaybackActivity.onCreate; on a launcher start the same message lands somewhere
-            // in Home's creation or first frames (not traced). After the first frame it delays
-            // neither screen's first draw. VISIONOS/TV only peek the
-            // visitor (no WebView), so the common open never waits for it; a web-family fallback
-            // (seconds into a ring walk) still finds the generator warm or warming - it starts
-            // ~0.1-0.2 s later than before - and demand initialization is unchanged. The 4 s
-            // fallback covers processes started without any UI.
-            // NEWTUBE(token-warmup): ...and, when an open is in flight (a share-link start, or a tap
-            // before the warm-up ran), not before that open's first frame or failure either: on a
-            // slow phone the WebView's construction landed on the main thread with the open's
-            // answer (Mi 8: answer -> first media request 280 ms beside it, 107 without; netbench
-            // r11 analysis, 3.4a). The 4 s fallback from process start still bounds it, and a WEB
-            // enrichment that would build the WebView on its own waits with it (see
-            // VideoInfoService.setEnrichmentGate). Rollback: debug.arc.token_warmup=frame.
-            final boolean holdForOpen = tokenWarmupAfterOpen();
-            final java.util.concurrent.atomic.AtomicBoolean warmupStarted =
-                    new java.util.concurrent.atomic.AtomicBoolean();
-            final java.util.function.Consumer<String> startWarmup = after -> {
-                if (warmupStarted.compareAndSet(false, true)) {
-                    LaunchMilestones.log("token-warmup start after=" + after);
-                    VideoInfoService.warmUpPoTokenGate();
-                }
-            };
-            LaunchMilestones.runAfterFirstFrame(TOKEN_WARMUP_FALLBACK_MS, () -> {
-                if (holdForOpen && com.liskovsoft.smartyoutubetv2.common.misc.OpenSettle.isOpenInFlight()) {
-                    LaunchMilestones.log("token-warmup hold reason=open");
-                    com.liskovsoft.smartyoutubetv2.common.misc.OpenSettle.runWhenSettled(
-                            TOKEN_WARMUP_FALLBACK_MS, () -> startWarmup.accept("open"));
-                } else {
-                    startWarmup.accept("frame");
-                }
-            });
-            if (holdForOpen) {
-                // The 4 s fallback, whatever the open does.
-                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(
-                        () -> startWarmup.accept("fallback"), TOKEN_WARMUP_FALLBACK_MS);
-                VideoInfoService.setEnrichmentGate(task ->
-                        com.liskovsoft.smartyoutubetv2.common.misc.OpenSettle.runWhenSettled(
-                                ENRICHMENT_MAX_HOLD_MS, task));
-            }
-        }
 
         // POOL EVICTION (mobile-only): with H2 on, every InnerTube call rides ONE connection, and
         // that connection dies silently when the default network is replaced (Wi-Fi -> cellular,
@@ -1011,54 +842,15 @@ public class MobileMainApplication extends MainApplication {
         // carries it, and scrolling to the end of the list loads it (MSC WatchNextGates).
         com.liskovsoft.youtubeapi.next.v2.WatchNextGates.setSuggestionsSectionContinuation(true);
 
-        // FIRST-RUN FIX (mobile-only): run the one-time YouTube session setup (visitor identity,
-        // app info, player-JS de-scrambler parse, client probing - ~15-20s on a fresh install) in
-        // the background, instead of inside the user's FIRST video tap. Round 2: the fetch itself
-        // now waits for the first feed paint (MobileBrowseActivity kicks SessionWarmup.start) so
-        // its /player + JS parse never race the launch-critical /browse chain; init() restores
-        // the persisted warm flag and arms a 15s fallback for offline/deep-link launches. See
-        // SessionWarmup for the locking/caching guarantees. TV never calls this.
-        if (!offlineBenchmark) SessionWarmup.init(this);
-
-        // FEED SNAPSHOTS (mobile-only): the grids repaint their last-known content instantly
-        // while the presenters refetch (see FeedCache), and since round 2 the last session's
-        // feeds also persist to disk so even a COLD start paints cards immediately (display-only
-        // until the refetch lands — a disk-restored Video has no live VideoGroup to paginate).
-        // Feeds are per-account, so an account switch must drop every snapshot (memory + disk)
-        // or the next repaint shows the previous user's feed.
-        FeedCache.init(this);
-        MediaServiceManager.instance().addAccountListener(account -> FeedCache.clear());
-
-        // API PRECONNECT (mobile-only): warm the www.youtube.com TLS/H2 session the instant the
-        // process starts. RetrofitOkHttpHelper's InnerTube client is built via newBuilder() off
-        // OkHttpManager's base client, so they SHARE one ConnectionPool — a completed handshake
-        // here is the connection the first /browse rides, taking DNS+TCP+TLS off the cold-start
-        // critical path (the googlevideo preconnect above covers only the media host). It runs
-        // on the InnerTube client itself so that client's stale-connection guard sees this
-        // connection too (it only observes its own calls).
-        Thread preconnect = new Thread(() -> {
-            try {
-                com.liskovsoft.googlecommon.common.helpers.RetrofitHelper.warmUpApiConnection(
-                        "https://www.youtube.com/generate_204");
-                android.util.Log.d("NetPath", "preconnected www.youtube.com");
-            } catch (Throwable e) {
-                android.util.Log.d("NetPath", "www.youtube.com preconnect skipped: " + e.getMessage());
-            }
-        }, "TubePreconnect");
-        preconnect.setDaemon(true);
-        if (!offlineBenchmark) preconnect.start();
-
         // NEWTUBE(downloads): the shared menus offer "Download" only once a handler is installed;
         // the Downloads section reads its cards through the same seam.
         com.newtube.mobile.downloads.DownloadsBridge.install(this);
 
         ViewManager viewManager = ViewManager.instance(this);
 
-        // Override just the Home + Playback mappings (and the cold-launch root) with
-        // the touch screens. Every other View->Activity mapping from
-        // MainApplication.setupViewManager() (Search, Channel, AppDialog, SignIn, ...)
-        // is left intact for later waves.
-        viewManager.register(BrowseView.class, MobileBrowseActivity.class);
+        // The phone's public-video home is Firebase-backed. Keep it as the root and as the
+        // fallback for inherited browse/sign-in routes so those routes cannot reopen InnerTube.
+        viewManager.register(BrowseView.class, com.newtube.mobile.ui.browse.FirebaseVideosActivity.class);
         viewManager.register(PlaybackView.class, MobilePlaybackActivity.class, MobileBrowseActivity.class);
         viewManager.register(AppDialogView.class, MobileAppDialogActivity.class, MobileBrowseActivity.class);
 
@@ -1073,14 +865,9 @@ public class MobileMainApplication extends MainApplication {
         // icon would still launch the Leanback SearchTagsActivity on a touch phone.
         viewManager.register(SearchView.class, MobileSearchActivity.class, MobileBrowseActivity.class);
 
-        // Wave 5: touch device-code sign-in screen (ARCHITECTURE.md section 7). Re-point the
-        // SignInView mapping (parent = Home, mirroring TV's
-        // SignInView -> SignInActivity, parent BrowseActivity) at the touch MobileSignInActivity,
-        // otherwise Settings -> Accounts -> "Sign in" (which calls YTSignInPresenter.start() ->
-        // ViewManager.startView(SignInView.class)) would still launch the Leanback GuidedStep
-        // SignInActivity on a touch phone. The auth backend (YTSignInPresenter / SignInService /
-        // token storage) is reused unchanged - only the View is re-skinned.
-        viewManager.register(SignInView.class, MobileSignInActivity.class, MobileBrowseActivity.class);
+        // Legacy sign-in routes land on the Firebase channel instead of opening YouTube auth.
+        viewManager.register(SignInView.class, com.newtube.mobile.ui.browse.FirebaseVideosActivity.class,
+                com.newtube.mobile.ui.browse.FirebaseVideosActivity.class);
 
         // Parity gaps: re-point the two remaining inherited Leanback screens at touch equivalents.
         //  * WebBrowserView (About / SponsorBlock / DeArrow "open link"): the TV WebBrowserActivity
@@ -1095,7 +882,7 @@ public class MobileMainApplication extends MainApplication {
         // ViewManager's stack, and Back from Settings then left the app.
         viewManager.register(MobileSettingsActivity.class, MobileSettingsActivity.class, MobileBrowseActivity.class);
 
-        viewManager.setRoot(MobileBrowseActivity.class);
+        viewManager.setRoot(com.newtube.mobile.ui.browse.FirebaseVideosActivity.class);
     }
 
     /**
@@ -1109,7 +896,7 @@ public class MobileMainApplication extends MainApplication {
      *
      * <p>The FIRST {@code onAvailable} is skipped on purpose: it is the platform replaying the
      * network we are already on, and evicting there would discard the app-start preconnect (the
-     * warmed www.youtube.com H2 connection the first /browse is meant to ride).
+     * app-start HTTP connection the first request is meant to ride).
      */
     private void startConnectionPoolEviction() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -1171,9 +958,6 @@ public class MobileMainApplication extends MainApplication {
         }
 
         if (level >= TRIM_MEMORY_RUNNING_LOW) {
-            if (level != TRIM_MEMORY_UI_HIDDEN) {
-                SessionWarmup.onMemoryPressure();
-            }
             VideoInfoService.releaseSigRuntime();
         }
     }
@@ -1182,7 +966,6 @@ public class MobileMainApplication extends MainApplication {
     public void onLowMemory() {
         super.onLowMemory();
 
-        SessionWarmup.onMemoryPressure();
         VideoInfoService.releaseSigRuntime();
     }
 
@@ -1190,25 +973,6 @@ public class MobileMainApplication extends MainApplication {
      * Hidden API access is confined to debug A/B knobs (callers check BuildConfig.DEBUG) and
      * degrades to unset.
      */
-    /**
-     * NEWTUBE(token-warmup): {@link #TOKEN_WARMUP_AFTER_OPEN}, or debug.arc.token_warmup in debug and
-     * benchmark builds ("frame": after the first screen's frame, v20; "open": after the open).
-     */
-    private static boolean tokenWarmupAfterOpen() {
-        if (com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG
-                || com.liskovsoft.smartyoutubetv2.tv.BuildConfig.BENCHMARK) {
-            String mode = getDebugSystemProperty("debug.arc.token_warmup");
-            if ("frame".equals(mode)) {
-                android.util.Log.w("NetPath", "token warm-up after the first screen's frame (debug)");
-                return false;
-            }
-            if ("open".equals(mode)) {
-                return true;
-            }
-        }
-        return TOKEN_WARMUP_AFTER_OPEN;
-    }
-
     public static String getDebugSystemProperty(String key) {
         try {
             Class<?> properties = Class.forName("android.os.SystemProperties");

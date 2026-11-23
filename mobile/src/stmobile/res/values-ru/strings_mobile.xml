@@ -536,7 +536,6 @@
     <string name="mobile_shorts_clean_tip">Совет: удерживайте ролик Shorts, чтобы скрыть кнопки</string>
 <!-- Newer HindYou mobile features -->
     <string name="mobile_settings_card_style">Стиль карточек</string>
-    <string name="mobile_you_about">О HindYou ›</string>
     <string name="mobile_card_style_plain">Минималистичный</string>
     <string name="mobile_card_style_plain_desc">Едва заметное стекло на чёрном фоне с окантовкой, без акцентного свечения</string>
     <string name="mobile_card_style_minimal">Минимализм HindYou</string>

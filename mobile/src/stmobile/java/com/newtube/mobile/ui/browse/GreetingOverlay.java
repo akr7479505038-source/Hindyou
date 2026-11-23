@@ -98,7 +98,7 @@ final class GreetingOverlay {
                 () -> open(SettingsPages.CUSTOMIZE));
         addOption(content, R.drawable.ic_mobile_update, R.string.check_for_updates, () -> {
             if (AppUpdatePresenter.isInAppUpdatesDisabled()) {
-                open(SettingsPages.ABOUT); // store build: no updater, the version lives in About
+                open(SettingsPages.GENERAL); // store builds show the version in General settings
             } else {
                 AppUpdatePresenter.instance(mActivity).start(true);
             }

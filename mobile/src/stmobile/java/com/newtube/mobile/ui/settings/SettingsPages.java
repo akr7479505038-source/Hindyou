@@ -5,13 +5,8 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 
-import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
-import com.liskovsoft.smartyoutubetv2.common.misc.DiagnosticLog;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.newtube.mobile.ui.about.AboutShareRows;
 import com.newtube.mobile.ui.common.ThemeMode;
 
 import com.newtube.mobile.ui.common.BatterySaver;
@@ -29,7 +24,7 @@ import java.util.List;
  *   [ Search settings ]          (SettingsSearchFragment: every row of every page)
  *   App:    General · Customization · Feeds · History and privacy · Downloads · Notifications
  *   Video:  Playback · Video quality · Audio quality · Captions · SponsorBlock · DeArrow
- *   Other:  Backup and restore · Advanced · About
+ *   Other:  Backup and restore · Advanced
  * </pre>
  */
 public final class SettingsPages {
@@ -59,10 +54,7 @@ public final class SettingsPages {
     public static final String STORAGE = "storage";
     public static final String BATTERY = "battery";
     public static final String ADVANCED = "advanced";
-    public static final String ABOUT = "about";
     public static final String TV_INSTALL = "tv_install";
-    public static final String ABOUT_REPORTERS = "about_reporters";
-    public static final String ABOUT_CONTRIBUTORS = "about_contributors";
 
     /** A built page: its title and rows. */
     public static final class Page {
@@ -131,14 +123,8 @@ public final class SettingsPages {
                 return battery(context);
             case ADVANCED:
                 return PlayerPages.advanced(context);
-            case ABOUT:
-                return about(context);
             case TV_INSTALL:
                 return Build.VERSION.SDK_INT >= 26 ? TvInstall.page(context) : root(context);
-            case ABOUT_REPORTERS:
-                return AboutPeople.reporters(context);
-            case ABOUT_CONTRIBUTORS:
-                return AboutPeople.contributors(context);
             case ROOT:
             default:
                 return root(context);
@@ -148,7 +134,7 @@ public final class SettingsPages {
     private static Page root(Context context) {
         List<SettingsRow> rows = new ArrayList<>();
 
-        // MEETUBE: no account or coffee rows here - the You tab switches accounts, About thanks.
+        // MEETUBE: no account rows here - the You tab switches accounts.
         rows.add(SettingsRow.header(context.getString(R.string.mobile_settings_group_app)));
         rows.add(SettingsRow.page(R.drawable.ic_settings_general, context.getString(R.string.mobile_settings_general),
                 context.getString(R.string.mobile_settings_general_summary), GENERAL));
@@ -189,9 +175,7 @@ public final class SettingsPages {
                 ? R.string.mobile_settings_battery_light : R.string.mobile_settings_battery_keep)));
         rows.add(SettingsRow.page(R.drawable.ic_settings_advanced, context.getString(R.string.mobile_settings_advanced),
                 context.getString(R.string.mobile_settings_advanced_summary), ADVANCED));
-        rows.add(SettingsRow.page(R.drawable.ic_settings_about, context.getString(R.string.mobile_settings_about),
-                versionLine(context), ABOUT));
-        // Install on TV lives in About. MEETUNE: the foot of the page switches to MeeTune.
+        // MEETUNE: the foot of the page switches to MeeTune.
         for (SettingsRow row : rows) { // the top list stays minimal: names only, what is inside shows on the page
             row.summary = null;
         }
@@ -233,109 +217,8 @@ public final class SettingsPages {
         return context.getString(R.string.mobile_settings_customize_summary_value, themeLabel);
     }
 
-    private static String versionLine(Context context) {
+    static String versionLine(Context context) {
         return context.getString(R.string.app_name) + " " + AppInfoHelpers.getAppVersionName(context);
     }
 
-    private static Page about(Context context) {
-        List<SettingsRow> rows = new ArrayList<>();
-        rows.add(SettingsRow.header(context.getString(R.string.mobile_about_creator)));
-        rows.add(SettingsRow.custom(context.getString(R.string.mobile_about_dev_name), SettingsPages::aboutCard));
-
-        if (AppUpdatePresenter.isInAppUpdatesDisabled()) {
-            // Store build (-Pfdroid): the version stays, the update row and switch go.
-            rows.add(icon(R.drawable.ic_mobile_update,
-                    SettingsRow.action(context.getString(R.string.mobile_settings_version), versionLine(context), page -> { })));
-        } else {
-            rows.add(icon(R.drawable.ic_mobile_update, SettingsRow.action(context.getString(R.string.check_for_updates),
-                    versionLine(context), page -> AppUpdatePresenter.instance(page.requireContext()).start(true))));
-            AppUpdateChecker checker = new AppUpdateChecker(context, null);
-            rows.add(icon(R.drawable.ic_about_notifications, SettingsRow.toggle(context.getString(R.string.check_updates_auto),
-                    context.getString(R.string.mobile_settings_update_notify_summary),
-                    checker::isUpdateCheckEnabled, on -> {
-                        checker.setUpdateCheckEnabled(on);
-                        // MEETUBE(update notify): the background check follows this switch
-                        com.newtube.mobile.update.UpdateNotifyWorker.schedule(context);
-                    })));
-            // MEETUBE(update pop-up): "Don't ask again" on the pop-up turns this off.
-            com.newtube.mobile.update.AppUpdates updates = com.newtube.mobile.update.AppUpdates.instance(context);
-            rows.add(icon(R.drawable.ic_about_campaign, SettingsRow.toggle(context.getString(R.string.mobile_settings_update_prompt),
-                    context.getString(R.string.mobile_settings_update_prompt_summary),
-                    () -> !updates.isPromptOff(), on -> updates.setPromptOff(!on))));
-        }
-
-        rows.add(SettingsRow.divider());
-        rows.add(SettingsRow.page(R.drawable.ic_about_groups, context.getString(R.string.mobile_about_reporters),
-                context.getString(R.string.mobile_about_reporters_summary), ABOUT_REPORTERS));
-        rows.add(SettingsRow.page(R.drawable.ic_about_handshake, context.getString(R.string.mobile_about_contributors),
-                context.getString(R.string.mobile_about_contributors_summary), ABOUT_CONTRIBUTORS));
-        rows.add(icon(R.drawable.ic_about_code, SettingsRow.action(context.getString(R.string.about_source_code),
-                context.getString(R.string.about_source_code_url).replace("https://", ""),
-                page -> Utils.openLinkExt(page.requireContext(), context.getString(R.string.about_source_code_url)))));
-        rows.add(icon(R.drawable.ic_about_gavel, SettingsRow.action(context.getString(R.string.about_license),
-                context.getString(R.string.about_license_name),
-                page -> Utils.openLinkExt(page.requireContext(), context.getString(R.string.about_license_url)))));
-        rows.add(SettingsRow.custom(context.getString(R.string.mobile_about_tv_title), SettingsPages::tvTeaser));
-
-        return new Page(context.getString(R.string.about_app, context.getString(R.string.app_name)), rows);
-    }
-
-    /**
-     * MEETUBE(about): a look at MeeTube TV at the bottom of About. The card leans with the phone and the
-     * screenshot, a little zoomed, pans inside its rounded window. The button opens Install on TV.
-     */
-    private static android.view.View tvTeaser(@NonNull android.view.ViewGroup parent, @NonNull SettingsAdapter.Listener page) {
-        Context context = parent.getContext();
-        android.view.View card = android.view.LayoutInflater.from(context).inflate(R.layout.item_mobile_about_tv, parent, false);
-        card.findViewById(R.id.about_tv_window).setClipToOutline(true);
-        card.findViewById(R.id.about_tv_install).setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= 26 && page instanceof SettingsPageFragment) {
-                ((SettingsPageFragment) page).openPage(TV_INSTALL);
-            } else {
-                Utils.openLinkExt(context, "https://github.com/yashoncode/meetube-tv");
-            }
-        });
-        card.findViewById(R.id.about_tv_repo).setOnClickListener(v ->
-                Utils.openLinkExt(context, "https://github.com/yashoncode/meetube-tv"));
-        TiltParallax.attach((android.view.ViewGroup) card, 0.6f, card.findViewById(R.id.about_tv_shot));
-        return card;
-    }
-
-    /** MEETUBE(about): an About row's icon, in the same glass bead as the top level's. */
-    private static SettingsRow icon(@androidx.annotation.DrawableRes int icon, SettingsRow row) {
-        row.icon = icon;
-        return row;
-    }
-
-    /**
-     * MEETUBE(about): who makes MeeTube - the GitHub photo, name and handle (each opens the profile),
-     * the coffee pill, and Star, Share and Send log as glass buttons.
-     */
-    private static android.view.View aboutCard(@NonNull android.view.ViewGroup parent, @NonNull SettingsAdapter.Listener page) {
-        Context context = parent.getContext();
-        android.view.View card = android.view.LayoutInflater.from(context)
-                .inflate(R.layout.item_mobile_about_header, parent, false);
-        android.view.View.OnClickListener profile = v -> Utils.openLinkExt(context, context.getString(R.string.mobile_about_dev_url));
-        for (int id : new int[] {R.id.about_avatar, R.id.about_name, R.id.about_handle}) {
-            card.findViewById(id).setOnClickListener(profile);
-        }
-        card.findViewById(R.id.about_avatar).setContentDescription(context.getString(R.string.mobile_about_made_by,
-                context.getString(R.string.mobile_about_dev_name)));
-        card.findViewById(R.id.about_coffee).setOnClickListener(v -> CoffeeSheet.show(context));
-        card.findViewById(R.id.about_star).setOnClickListener(v -> AboutShareRows.star(context));
-        card.findViewById(R.id.about_share).setOnClickListener(v -> AboutShareRows.share(context));
-        card.findViewById(R.id.about_log).setOnClickListener(v -> DiagnosticLog.share(context));
-        ((android.widget.TextView) card.findViewById(R.id.about_terminal)).setText(androidx.core.text.HtmlCompat.fromHtml(
-                context.getString(R.string.mobile_about_coffee_note), androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY));
-        // A view animation, not an animator: it only runs while the card is drawn.
-        android.view.animation.AlphaAnimation blink = new android.view.animation.AlphaAnimation(1f, 0f);
-        blink.setDuration(1060);
-        blink.setRepeatCount(android.view.animation.Animation.INFINITE);
-        blink.setInterpolator(t -> t < 0.5f ? 0f : 1f);
-        card.findViewById(R.id.about_cursor).startAnimation(blink);
-        TiltParallax.attach((android.view.ViewGroup) card, card.findViewById(R.id.about_avatar), card.findViewById(R.id.about_name),
-                card.findViewById(R.id.about_handle), card.findViewById(R.id.about_terminal_box),
-                card.findViewById(R.id.about_coffee), card.findViewById(R.id.about_buttons));
-        return card;
-    }
 }

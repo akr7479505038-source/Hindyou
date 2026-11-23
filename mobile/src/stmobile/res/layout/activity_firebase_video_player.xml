@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mobile_color_background"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/firebase_player_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mobile_dialog_back"
+        android:padding="12dp"
+        android:src="@drawable/ic_mobile_back_arrow" />
+
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/firebase_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="240dp" />
+
+    <TextView
+        android:id="@+id/firebase_player_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="@color/mobile_color_on_surface"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/firebase_player_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        android:textColor="@color/mobile_color_on_surface_secondary"
+        android:textSize="15sp" />
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+{
+  "rules": {
+    "videos": {
+      ".read": true,
+      ".indexOn": ["createdAt"],
+      "$videoId": {
+        ".write": "auth != null && newData.child('ownerId').val() === auth.uid && (!data.exists() || data.child('ownerId').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['id', 'title', 'description', 'videoUrl', 'thumbnailUrl', 'ownerId', 'ownerName', 'ownerPhoto', 'createdAt'])",
+        "id": {
+          ".validate": "newData.isString() && newData.val() === $videoId"
+        },
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "description": {
+          ".validate": "newData.isString()"
+        },
+        "videoUrl": {
+          ".validate": "newData.isString()"
+        },
+        "thumbnailUrl": {
+          ".validate": "newData.isString()"
+        },
+        "ownerId": {
+          ".validate": "newData.isString() && newData.val() === auth.uid"
+        },
+        "ownerName": {
+          ".validate": "newData.isString()"
+        },
+        "ownerPhoto": {
+          ".validate": "newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}

@@ -42,7 +42,8 @@ build/
 /smarttube/output
 /mobile/output
 /smarttubemobile/release
-# google-services.json
+# Firebase app configuration is supplied per checkout and must not be committed.
+mobile/google-services.json
 *.hprof
 log.txt
 android.keystore

@@ -126,6 +126,7 @@ public class NewUploadsWorker extends Worker {
         WorkManager work = WorkManager.getInstance(context);
         if (!isEnabled(context)) {
             work.cancelUniqueWork(WORK);
+            work.cancelUniqueWork(WORK + "_now");
             return;
         }
         // UPDATE: a changed interval takes over the running schedule

@@ -1,249 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mobile_color_background"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="8dp">
-
-        <ImageButton
-            android:id="@+id/mobile_create_close"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/mobile_dialog_back"
-            android:padding="13dp"
-            android:src="@drawable/ic_mobile_back_arrow" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/mobile_create_title"
-            android:textColor="@color/mobile_color_on_surface"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mobile_create_publish"
-            style="@style/Widget.NewTube.Button.Pill"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:enabled="false"
-            android:text="@string/mobile_create_publish"
-            android:textAllCaps="false"
-            android:textSize="12sp"
-            app:cornerRadius="20dp" />
-
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="16dp">
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="260dp"
-                android:background="@drawable/mobile_you_tile_bg">
-
-                <ImageView
-                    android:id="@+id/mobile_create_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/mobile_create_prompt"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="24dp"
-                    android:text="@string/mobile_create_select_prompt"
-                    android:textColor="@color/mobile_color_on_surface_secondary"
-                    android:textSize="16sp" />
-
-            </FrameLayout>
+            <ImageButton
+                android:id="@+id/firebase_upload_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/mobile_dialog_back"
+                android:padding="12dp"
+                android:src="@drawable/ic_mobile_back_arrow" />
 
             <TextView
-                android:id="@+id/mobile_create_selected"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ellipsize="middle"
-                android:maxLines="1"
-                android:textColor="@color/mobile_color_on_surface_secondary"
-                android:textSize="13sp"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/mobile_create_caption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/mobile_you_tile_bg"
-                android:gravity="top|start"
-                android:hint="@string/mobile_create_post"
-                android:inputType="textCapSentences|textMultiLine"
-                android:minHeight="88dp"
-                android:padding="14dp"
+                android:layout_weight="1"
+                android:text="@string/firebase_upload_title"
                 android:textColor="@color/mobile_color_on_surface"
-                android:textColorHint="@color/mobile_color_on_surface_secondary"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/mobile_create_media_controls"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mobile_create_add"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="@string/mobile_create_add"
-                    android:textAllCaps="false"
-                    app:cornerRadius="24dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mobile_create_add_sound"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="@string/mobile_create_add_sound"
-                    android:textAllCaps="false"
-                    app:cornerRadius="24dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/mobile_create_camera_controls"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mobile_create_flip"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="@string/mobile_create_flip_camera"
-                    android:textAllCaps="false"
-                    app:cornerRadius="24dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mobile_create_timer"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="@string/mobile_create_timer"
-                    android:textAllCaps="false"
-                    app:cornerRadius="24dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/mobile_create_speed"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="@string/mobile_create_speed"
-                    android:textAllCaps="false"
-                    app:cornerRadius="24dp" />
-
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/mobile_create_record"
-                style="@style/Widget.NewTube.Button.Pill"
-                android:layout_width="68dp"
-                android:layout_height="68dp"
-                android:layout_marginTop="14dp"
-                android:contentDescription="@string/mobile_create_record"
-                android:text="●"
-                android:textColor="@android:color/white"
-                android:textSize="26sp"
-                app:backgroundTint="?attr/colorPrimary"
-                app:cornerRadius="34dp" />
-
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-    </ScrollView>
+        <EditText
+            android:id="@+id/firebase_upload_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/mobile_you_tile_bg"
+            android:hint="@string/firebase_video_title_hint"
+            android:inputType="textCapSentences"
+            android:padding="14dp"
+            android:textColor="@color/mobile_color_on_surface"
+            android:textColorHint="@color/mobile_color_on_surface_secondary" />
 
-    <LinearLayout
-        android:id="@+id/mobile_create_modes"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="8dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mobile_create_mode_video"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="@string/mobile_create_video"
-            android:textAllCaps="false"
-            app:cornerRadius="24dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mobile_create_mode_short"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="@string/mobile_create_short"
-            android:textAllCaps="false"
-            app:cornerRadius="24dp" />
+        <EditText
+            android:id="@+id/firebase_upload_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/mobile_you_tile_bg"
+            android:gravity="top|start"
+            android:hint="@string/firebase_video_description_hint"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minHeight="96dp"
+            android:padding="14dp"
+            android:textColor="@color/mobile_color_on_surface"
+            android:textColorHint="@color/mobile_color_on_surface_secondary" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/mobile_create_mode_live"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="@string/mobile_create_live"
+            android:id="@+id/firebase_pick_video"
+            style="@style/Widget.NewTube.Button.Pill"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/firebase_select_video"
             android:textAllCaps="false"
-            app:cornerRadius="24dp" />
+            app:cornerRadius="26dp" />
+
+        <TextView
+            android:id="@+id/firebase_upload_video_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="6dp"
+            android:textColor="@color/mobile_color_on_surface_secondary"
+            android:textSize="13sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/mobile_create_mode_post"
+            android:id="@+id/firebase_pick_thumbnail"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="@string/mobile_create_post"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/firebase_select_thumbnail"
             android:textAllCaps="false"
-            app:cornerRadius="24dp" />
+            app:cornerRadius="26dp" />
+
+        <TextView
+            android:id="@+id/firebase_upload_thumbnail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="6dp"
+            android:textColor="@color/mobile_color_on_surface_secondary"
+            android:textSize="13sp" />
+
+        <ProgressBar
+            android:id="@+id/firebase_upload_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/firebase_upload_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp"
+            android:textColor="@color/mobile_color_on_surface_secondary"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/firebase_upload_publish"
+            style="@style/Widget.NewTube.Button.Pill"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:enabled="false"
+            android:text="@string/firebase_publish_video"
+            android:textAllCaps="false"
+            app:cornerRadius="26dp" />
 
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

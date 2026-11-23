@@ -1,6 +1,7 @@
 apply from: gradle.ext.sharedModulesConstants
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.BuiltArtifactsLoader
@@ -224,20 +225,9 @@ android {
         debug {
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
-                // -PsideBySide: a debug build next to the daily app, not over it.
-                if (project.hasProperty('sideBySide')) {
-                    applicationIdSuffix ".debug"
-                }
-            } else {
-                // No keystore.properties on this machine, so debug falls back to the auto-generated
-                // debug key and can NOT replace an installed release build (INSTALL_FAILED_UPDATE_
-                // INCOMPATIBLE). Suffixing the applicationId lets the debug build sit side by side
-                // with the daily driver instead of forcing an uninstall that would wipe the signed-in
-                // OAuth state. All manifest authorities already interpolate ${applicationId}, so they
-                // follow the suffix automatically. When the release keystore IS present this branch
-                // is skipped and debug keeps replacing release in place, exactly as before.
-                applicationIdSuffix ".debug"
             }
+            // Firebase's OAuth client is registered for the release applicationId. Keeping the
+            // debug id identical lets Google Sign-In use the same google-services.json entry.
         }
         benchmark {
             initWith release
@@ -373,6 +363,11 @@ def registerEmbeddedArtProfile(variant) {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation platform('com.google.firebase:firebase-bom:34.7.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.android.gms:play-services-auth:21.3.0'
 
     implementation 'androidx.annotation:annotation:' + annotationXVersion
     implementation 'androidx.work:work-runtime:' + workVersion // MEETUBE(auto download): already common's, compiled against here
