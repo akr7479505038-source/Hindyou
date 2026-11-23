@@ -11,7 +11,7 @@
     <string name="meetune_settings">Настройки MeeTune</string>
     <string name="meetune_account">Аккаунт и настройки</string>
     <string name="meetune_add_account">Добавить аккаунт</string>
-    <string name="meetune_to_meetube">Вернуться в MeeTube</string>
+    <string name="meetune_to_hindyou">Вернуться в HindYou</string>
     <string name="meetune_show_all">Показать все</string>
     <string name="meetune_more">Ещё</string>
     <string name="meetune_play">Воспроизвести</string>
@@ -104,7 +104,7 @@
     <string name="meetune_link_hindyou">HindYou →</string>
     <string name="meetune_link_meetune">MeeTune →</string>
     <string name="meetune_home_hint">Нажмите на значок, чтобы перейти в MeeTune</string>
-    <string name="meetune_meetube_hint">Нажмите на значок, чтобы перейти в MeeTube</string>
+    <string name="meetune_hindyou_hint">Нажмите на значок, чтобы перейти в HindYou</string>
     <string name="meetune_cached">Песни в кеше</string>
     <string name="meetune_cached_summary">Воспроизведение без сети</string>
     <string name="meetune_storage_songs">Песни MeeTune (в кеше)</string>

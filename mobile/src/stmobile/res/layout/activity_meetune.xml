@@ -199,7 +199,7 @@
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:clickable="true"
-            android:contentDescription="@string/meetune_to_meetube"
+            android:contentDescription="@string/meetune_to_hindyou"
             android:elevation="6dp"
             android:focusable="true"
             app:glassCornerRadius="22dp"
@@ -329,7 +329,7 @@
 
     </LinearLayout>
 
-    <!-- "Tap the icon to switch to MeeTube" under Home's brand pill, MeeTube Home's twin
+    <!-- "Tap the icon to switch to HindYou" under Home's brand pill, HindYou Home's twin
          (mobile_meetune_hint); placed by MeeTune.showSwitchHint. -->
     <com.newtube.mobile.ui.common.GlassView
         android:id="@+id/meetune_meetube_hint"
@@ -362,7 +362,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:maxLines="1"
-                android:text="@string/meetune_meetube_hint"
+                android:text="@string/meetune_hindyou_hint"
                 android:textColor="@color/mobile_color_on_surface"
                 android:textSize="15sp" />
 
