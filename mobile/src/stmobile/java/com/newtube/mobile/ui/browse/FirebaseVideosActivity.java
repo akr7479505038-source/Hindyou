@@ -29,6 +29,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.newtube.mobile.ui.common.MobileActivity;
+import com.newtube.mobile.ui.playback.FirebaseVideoPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
