@@ -409,7 +409,7 @@
     <string name="firebase_upload_video">Upload video</string>
     <string name="firebase_no_videos">No videos have been uploaded yet.</string>
     <string name="firebase_sign_in_required">Sign in with Google before uploading.</string>
-    <string name="firebase_google_token_missing">Google Sign-In did not return an ID token. Check Firebase's Web OAuth client configuration.</string>
+    <string name="firebase_google_token_missing">Google Sign-In did not return an ID token. Check Firebase\'s Web OAuth client configuration.</string>
     <string name="firebase_sign_in_failed">Google sign-in failed: %1$s</string>
     <string name="firebase_sign_out_failed">Sign-out failed: %1$s</string>
     <string name="firebase_setup_failed">Firebase setup failed: %1$s</string>
