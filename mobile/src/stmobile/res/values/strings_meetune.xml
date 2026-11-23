@@ -11,7 +11,7 @@
     <string name="meetune_settings">MeeTune settings</string>
     <string name="meetune_account">Account and settings</string>
     <string name="meetune_add_account">Add account</string>
-    <string name="meetune_to_meetube">Back to MeeTube</string>
+    <string name="meetune_to_hindyou">Back to HindYou</string>
     <string name="meetune_show_all">Show all</string>
     <string name="meetune_more">More</string>
     <string name="meetune_play">Play</string>
@@ -43,10 +43,10 @@
     <string name="meetune_set_customize_summary">The You page heart, the name beside the logo and Search\'s glow</string>
     <string name="meetune_set_brand_name">MeeTune name beside the logo</string>
     <string name="meetune_set_brand_name_summary">Off, Home\'s corner shows the heart alone</string>
-    <string name="meetune_link_meetube">MeeTube →</string>
+    <string name="meetune_link_hindyou">HindYou →</string>
     <string name="meetune_link_meetune">MeeTune →</string>
     <string name="meetune_home_hint">Tap the icon to switch to MeeTune</string>
-    <string name="meetune_meetube_hint">Tap the icon to switch to MeeTube</string>
+    <string name="meetune_hindyou_hint">Tap the icon to switch to HindYou</string>
     <string name="meetune_cached">Cached songs</string>
     <string name="meetune_cached_summary">Play with no network</string>
     <string name="meetune_storage_songs">MeeTune songs (in cache)</string>
@@ -76,7 +76,7 @@
     <string name="meetune_eq">MeeTune Equalizer</string>
     <string name="meetune_eq_sound">Sound</string>
     <string name="meetune_eq_off">Off</string>
-    <string name="meetune_eq_note">Shapes MeeTune\'s songs inside the app, before they reach the phone. MeeTube videos keep their own sound.</string>
+    <string name="meetune_eq_note">Shapes MeeTune\'s songs inside the app, before they reach the phone. HindYou videos keep their own sound.</string>
     <string name="meetune_eq_dynamic">Dynamic</string>
     <string name="meetune_eq_manual">Manual</string>
     <string name="meetune_eq_tone">Tone</string>
@@ -114,7 +114,7 @@
     <string name="meetune_eq_system_summary">Your phone\'s own panel</string>
     <string name="meetune_eq_system_none">This phone has no equalizer panel</string>
     <string name="meetune_eq_system_note">Runs after MeeTune\'s, on the phone\'s sound. Using both applies both.</string>
-    <!-- The song menu (a song's three dots): YouTube Music's, on MeeTube's frosted glass. -->
+    <!-- The song menu (a song's three dots): YouTube Music's, on HindYou's frosted glass. -->
     <string name="meetune_dislike">Dislike</string>
     <string name="meetune_liked_done">Added to your liked songs</string>
     <string name="meetune_unliked">Removed from your liked songs</string>
@@ -173,7 +173,7 @@
     <string name="meetune_head_tracking_summary_none">Needs the Spatial audio of this phone: put on earbuds that support it and turn it on in their Bluetooth settings</string>
     <string name="meetune_crossfade">Crossfade</string>
     <string name="meetune_volume">Volume</string>
-    <string name="meetune_volume_note">Songs only; MeeTube keeps its own Player volume. Over 100% boosts quiet songs and quiet phones. Very high levels can distort the sound or damage speakers</string>
+    <string name="meetune_volume_note">Songs only; HindYou keeps its own Player volume. Over 100% boosts quiet songs and quiet phones. Very high levels can distort the sound or damage speakers</string>
     <string name="meetune_crossfade_off">Off</string>
     <string name="meetune_crossfade_seconds">%1$d s</string>
     <string name="meetune_automix">MeeTuneMix</string>

@@ -40,6 +40,7 @@ import com.google.android.material.button.MaterialButton;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
+import com.liskovsoft.googlecommon.service.oauth.YouTubeAccount;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
@@ -48,6 +49,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
@@ -265,9 +267,11 @@ public class MobileBrowseActivity extends MobileActivity
     // "You" tab panel (account header + grouped section rows + Settings row; replaces the drawer).
     private View mYouPanel;
     private LinearLayout mYouRows;
-    /** You-tab account header views (sign-in entry / current account name+email+avatar). */
+    /** You-tab identity (account name, email, channel handle and avatar). */
     private TextView mYouAccountText;
     private TextView mYouAccountSub;
+    private TextView mYouHandle;
+    private MaterialButton mYouViewChannel;
     private ImageView mYouAvatar;
     /** True while the You panel covers the content grid (the You tab is selected). */
     private boolean mYouShowing;
@@ -447,6 +451,8 @@ public class MobileBrowseActivity extends MobileActivity
         mYouRows = findViewById(R.id.mobile_you_rows);
         mYouAccountText = findViewById(R.id.mobile_you_account_text);
         mYouAccountSub = findViewById(R.id.mobile_you_account_sub);
+        mYouHandle = findViewById(R.id.mobile_you_handle);
+        mYouViewChannel = findViewById(R.id.mobile_you_view_channel);
         mYouAvatar = findViewById(R.id.mobile_you_avatar);
 
         mErrorContainer = findViewById(R.id.mobile_error_container);
@@ -464,6 +470,8 @@ public class MobileBrowseActivity extends MobileActivity
         mSearchFab = findViewById(R.id.mobile_search_fab);
         com.newtube.mobile.ui.common.Glass.blur(mSearchFab, findViewById(R.id.mobile_blur_target));
         mSearchFab.setOnClickListener(v -> SearchPresenter.instance(this).startSearch(null));
+        findViewById(R.id.mobile_create_button).setOnClickListener(v ->
+                startActivity(new Intent(this, com.newtube.mobile.ui.create.MobileCreateActivity.class)));
         // The pill floats above the system bar (content is already inset), so the bar must not
         // pad itself by that inset too - Material does, whatever paddingBottomSystemWindowInsets says.
         androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(mBottomNav, (v, insets) -> insets);
@@ -2168,14 +2176,15 @@ public class MobileBrowseActivity extends MobileActivity
         // Subscriptions/Playlists "Sign in" button). AccountsSheet routes: no stored accounts
         // -> device-code sign-in; otherwise the native switch/add/sign-out sheet (also when
         // browsing signed-out with stored accounts, so they stay re-selectable).
-        // MEETUBE(you page): only the avatar (and Accounts) opens the accounts sheet; the name and
-        // email just pop when touched.
+        // The account identity opens its channel; the separate Accounts action manages sign-in.
         View accountRow = findViewById(R.id.mobile_you_account_row);
-        accountRow.setClickable(false);
+        accountRow.setClickable(true);
         accountRow.setBackground(null);
-        findViewById(R.id.mobile_you_avatar_glass).setOnClickListener(v -> AccountsSheet.show(this, this::updateAccountRow));
-        findViewById(R.id.mobile_you_account_text).setOnClickListener(this::popText);
-        findViewById(R.id.mobile_you_account_sub).setOnClickListener(this::popText);
+        accountRow.setOnClickListener(v -> openMyChannelOrAccounts());
+        findViewById(R.id.mobile_you_avatar_glass).setOnClickListener(v -> openMyChannelOrAccounts());
+        findViewById(R.id.mobile_you_account_text).setOnClickListener(v -> openMyChannelOrAccounts());
+        findViewById(R.id.mobile_you_handle).setOnClickListener(v -> openMyChannelOrAccounts());
+        findViewById(R.id.mobile_you_view_channel).setOnClickListener(v -> openMyChannelOrAccounts());
         findViewById(R.id.mobile_you_accounts).setOnClickListener(v -> AccountsSheet.show(this, this::updateAccountRow));
         findViewById(R.id.mobile_you_settings).setOnClickListener(v -> openSettings());
         findViewById(R.id.mobile_you_actions).setBackground(new com.newtube.mobile.ui.common.AccentCard(this,
@@ -2338,8 +2347,35 @@ public class MobileBrowseActivity extends MobileActivity
         boolean subScreen = mSectionFromYou && !mYouShowing
                 && mBottomNav.getMenu().findItem(toMenuItemId(mCurrentSectionId)) == null;
         mTopBar.show(subScreen, mYouShowing ? getString(R.string.mobile_nav_you) : getCurrentSectionTitle());
+        findViewById(R.id.mobile_create_button).setVisibility(mYouShowing ? View.VISIBLE : View.GONE);
         updateChipRow();
         syncMeeTuneHint();
+    }
+
+    private void openMyChannelOrAccounts() {
+        String handle = selectedChannelHandle();
+        if (handle == null) {
+            AccountsSheet.show(this, this::updateAccountRow);
+            return;
+        }
+        ChannelPresenter.instance(this).openChannel("@" + handle);
+    }
+
+    @Nullable
+    private String selectedChannelHandle() {
+        Account account = MediaServiceManager.instance().getSelectedAccount();
+        if (!(account instanceof YouTubeAccount)) {
+            return null;
+        }
+        String channelName = ((YouTubeAccount) account).getChannelName();
+        if (channelName == null) {
+            return null;
+        }
+        String handle = channelName.trim();
+        if (handle.startsWith("@")) {
+            handle = handle.substring(1);
+        }
+        return handle.isEmpty() ? null : handle;
     }
 
     /**
@@ -4032,6 +4068,11 @@ public class MobileBrowseActivity extends MobileActivity
             mYouAccountSub.setText(showEmail ? email : null);
             mYouAccountSub.setVisibility(showEmail ? View.VISIBLE : View.GONE);
 
+            String handle = selectedChannelHandle();
+            mYouHandle.setText(handle != null ? "@" + handle : null);
+            mYouHandle.setVisibility(handle != null ? View.VISIBLE : View.GONE);
+            mYouViewChannel.setVisibility(handle != null ? View.VISIBLE : View.GONE);
+
             String avatarUrl = account.getAvatarImageUrl();
             if (avatarUrl != null && !avatarUrl.isEmpty()) {
                 com.bumptech.glide.Glide.with(this)
@@ -4045,6 +4086,8 @@ public class MobileBrowseActivity extends MobileActivity
         } else {
             mYouAccountText.setText(R.string.dialog_add_account);
             mYouAccountSub.setVisibility(View.GONE);
+            mYouHandle.setVisibility(View.GONE);
+            mYouViewChannel.setVisibility(View.GONE);
             mYouAvatar.setImageResource(R.drawable.ic_you_avatar);
         }
     }

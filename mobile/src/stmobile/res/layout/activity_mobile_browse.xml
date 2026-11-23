@@ -153,9 +153,8 @@
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/meetube_nav_clearance">
 
-                <!-- Account header, as YouTube's You page has it: a big avatar, the name and the
-                     email, then the Accounts and Settings pills. A tap on the header or on Accounts
-                     signs in when signed out and switches accounts when signed in. -->
+                <!-- Channel identity comes before History: signed-in users can open their channel
+                     from the avatar, name, handle or View channel action. -->
                 <LinearLayout
                     android:id="@+id/mobile_you_account_row"
                     android:layout_width="match_parent"
@@ -206,6 +205,17 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/mobile_you_handle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/mobile_color_on_surface_secondary"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
                             android:id="@+id/mobile_you_account_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -215,6 +225,24 @@
                             android:textColor="@color/mobile_color_on_surface_secondary"
                             android:textSize="14sp"
                             android:visibility="gone" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/mobile_you_view_channel"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:layout_gravity="start"
+                            android:layout_marginTop="4dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:minWidth="0dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/mobile_you_view_channel"
+                            android:textAllCaps="false"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="13sp"
+                            android:visibility="gone"
+                            app:cornerRadius="18dp" />
 
                     </LinearLayout>
 
@@ -507,8 +535,17 @@
                     android:padding="11dp"
                     android:src="@drawable/ic_mobile_search" />
 
-            </LinearLayout>
+                <ImageButton
+                    android:id="@+id/mobile_create_button"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_mobile_create_button"
+                    android:contentDescription="@string/mobile_create_title"
+                    android:padding="11dp"
+                    android:src="@drawable/ic_mobile_add"
+                    android:visibility="gone" />
 
+            </LinearLayout>
         </com.newtube.mobile.ui.common.GlassView>
 
     </LinearLayout>

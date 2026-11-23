@@ -154,6 +154,44 @@
             android:textSize="14sp"
             tools:text="Vijay Television is a leading Tamil Language Entertainment Channel broadcasting innovative shows and programs from India." />
 
+        <LinearLayout
+            android:id="@+id/mobile_channel_owner_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mobile_channel_analytics"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/mobile_channel_analytics"
+                android:textAllCaps="false"
+                android:textColor="@color/mobile_color_on_surface"
+                app:cornerRadius="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mobile_channel_edit"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/mobile_channel_edit"
+                android:textAllCaps="false"
+                android:textColor="@color/mobile_color_on_surface"
+                app:cornerRadius="20dp" />
+
+        </LinearLayout>
+
         <!-- The watch page's Subscribe pill, full width as on YouTube's channel page. Shown signed
              in, once the channel's state is known. -->
         <LinearLayout

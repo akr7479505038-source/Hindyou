@@ -319,6 +319,15 @@
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.NewTube" />
 
+        <activity
+            android:name="com.newtube.mobile.ui.create.MobileCreateActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection|keyboardHidden|uiMode"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.NewTube" />
+
         <!--
           Touch player (Wave 2). configChanges covers orientation/screenSize/keyboardHidden so
           the Activity (and the live ExoPlayer instance it holds) survives device rotation

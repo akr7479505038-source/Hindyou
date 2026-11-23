@@ -3,7 +3,7 @@
      (com.newtube.mobile.ui.settings). Spanish in values-es. -->
 <resources>
     <!-- Shared -->
-    <string name="mobile_settings_restart_needed">Перезапустите MeeTube, чтобы применить это изменение</string>
+    <string name="mobile_settings_restart_needed">Перезапустите HindYou, чтобы применить это изменение</string>
     <string name="mobile_settings_restart">Перезапустить</string>
     <string name="mobile_settings_off">Выкл.</string>
     <string name="mobile_settings_more">Ещё</string>
@@ -61,7 +61,7 @@
     <string name="mobile_settings_advanced_summary">Потоковое воспроизведение, сеть и исправления</string>
     <string name="mobile_settings_about">О приложении</string>
     <string name="mobile_settings_coffee">Угостить разработчика кофе</string>
-    <string name="mobile_settings_coffee_summary">Поддержите MeeTube, если вам нравится приложение</string>
+    <string name="mobile_settings_coffee_summary">Поддержите HindYou, если вам нравится приложение</string>
 
     <!-- General -->
     <string name="mobile_settings_language">Язык</string>
@@ -84,7 +84,7 @@
     <string name="mobile_settings_nav_labels">Названия вкладок</string>
     <string name="mobile_settings_nav_labels_summary">Показывать название каждой вкладки под её значком на нижней панели</string>
     <string name="mobile_settings_brand_name">Название приложения на верхней панели</string>
-    <string name="mobile_settings_brand_name_summary">Показывать MeeTube рядом со значком вверху. При выключении остаётся только значок</string>
+    <string name="mobile_settings_brand_name_summary">Показывать HindYou рядом со значком вверху. При выключении остаётся только значок</string>
     <string name="mobile_settings_top_bar">Всегда показывать верхнюю панель</string>
     <string name="mobile_settings_top_bar_summary">Оставлять верхнюю панель на экране при прокрутке ленты, а не скрывать её</string>
     <string name="mobile_settings_search_fab">Кнопка поиска при скрытой панели</string>
@@ -166,9 +166,9 @@
     <string name="mobile_settings_watch_history_auto">Следовать настройке YouTube</string>
     <string name="mobile_settings_watch_history_auto_desc">Сохранять историю, если она включена в аккаунте YouTube</string>
     <string name="mobile_settings_watch_history_on">Всегда сохранять</string>
-    <string name="mobile_settings_watch_history_on_desc">При каждом запуске MeeTube снова включает историю просмотров YouTube</string>
+    <string name="mobile_settings_watch_history_on_desc">При каждом запуске HindYou снова включает историю просмотров YouTube</string>
     <string name="mobile_settings_watch_history_off">Не сохранять</string>
-    <string name="mobile_settings_watch_history_off_desc">MeeTube перестаёт передавать YouTube информацию о просмотренных видео</string>
+    <string name="mobile_settings_watch_history_off_desc">HindYou перестаёт передавать YouTube информацию о просмотренных видео</string>
     <string name="mobile_settings_clear_watch_history">Очистить историю просмотров</string>
     <string name="mobile_settings_clear_watch_history_summary">Удаляет просмотренные видео из истории YouTube</string>
     <string name="mobile_settings_clear_watch_history_confirm">Очистить историю просмотров?</string>
@@ -178,7 +178,7 @@
     <string name="mobile_settings_clear_search_history">Очистить историю поиска</string>
     <string name="mobile_settings_clear_search_history_summary">Удаляет поисковые запросы, сохранённые на этом телефоне</string>
     <string name="mobile_settings_clear_search_history_confirm">Очистить историю поиска?</string>
-    <string name="mobile_settings_clear_search_history_body">Будет удалена история поиска MeeTube на этом телефоне. Действие необратимо.</string>
+    <string name="mobile_settings_clear_search_history_body">Будет удалена история поиска HindYou на этом телефоне. Действие необратимо.</string>
 
     <!-- Backup -->
     <string name="mobile_settings_backup_now">Создать резервную копию</string>
@@ -188,9 +188,9 @@
     <string name="mobile_settings_restore_summary">Из резервной копии в %1$s</string>
     <string name="mobile_settings_auto_backup">Автоматическое резервное копирование</string>
     <string name="mobile_settings_auto_backup_off">Никогда</string>
-    <string name="mobile_settings_backup_note">Резервная копия содержит все ваши настройки MeeTube. Данные аккаунта YouTube, например подписки и история просмотров, остаются в аккаунте.</string>
+    <string name="mobile_settings_backup_note">Резервная копия содержит все ваши настройки HindYou. Данные аккаунта YouTube, например подписки и история просмотров, остаются в аккаунте.</string>
 
-    <!-- MEETUBE(home-rows): General > Home layout (issue #4). -->
+    <!-- HINDYOU(home-rows): General > Home layout (issue #4). -->
     <string name="mobile_settings_home_layout">Макет главной страницы</string>
     <string name="mobile_settings_app_icon">Значок приложения</string>
     <string name="mobile_app_icon_default">Классический (по умолчанию)</string>
@@ -211,14 +211,14 @@
     <string name="mobile_loader_glass_orb">Стеклянная сфера</string>
     <string name="mobile_loader_morphing_blob">Жидкая капля</string>
     <string name="mobile_loader_glass_orbit">Стеклянная орбита</string>
-    <string name="mobile_app_icon_pending">Перезапустите MeeTube, чтобы новый значок отображался везде. Иначе он изменится после выхода из приложения</string>
+    <string name="mobile_app_icon_pending">Перезапустите HindYou, чтобы новый значок отображался везде. Иначе он изменится после выхода из приложения</string>
     <string name="mobile_settings_home_layout_feed">Лента</string>
     <string name="mobile_settings_home_layout_feed_desc">Единый список видео, как в YouTube</string>
     <string name="mobile_settings_home_layout_rows">Ряды</string>
     <string name="mobile_settings_home_layout_rows_desc">Отдельный горизонтально прокручиваемый ряд для каждой темы, как в SmartTube</string>
     <string name="mobile_settings_home_shorts">Shorts на главной</string>
     <string name="mobile_settings_home_shorts_summary">Горизонтальный ряд Shorts, как в приложении YouTube</string>
-    <!-- MEETUBE(glass, issue #80; minimal buttons) -->
+    <!-- HINDYOU(glass, issue #80; minimal buttons) -->
     <string name="mobile_settings_player_buttons_look">Стиль кнопок плеера</string>
     <string name="mobile_settings_player_buttons_see_through">Полупрозрачный</string>
     <string name="mobile_settings_player_buttons_see_through_desc">Полупрозрачный стеклянный круг за каждой кнопкой поверх видео, Shorts и мини-плеера</string>
@@ -226,17 +226,17 @@
     <string name="mobile_settings_player_buttons_frosted_desc">Круги размывают изображение под ними. Расход батареи выше, а на медленных телефонах возможны подтормаживания</string>
     <string name="mobile_settings_player_buttons_minimal">Минималистичный</string>
     <string name="mobile_settings_player_buttons_minimal_desc">Без кругов — только значки с лёгкой тенью, как в YouTube</string>
-    <!-- MEETUBE(performance) -->
+    <!-- HINDYOU(performance) -->
     <string name="mobile_settings_performance">Производительность</string>
     <string name="mobile_settings_high_refresh">Режим высокой производительности</string>
     <string name="mobile_settings_high_refresh_summary">Частота приложения — %1$d Гц для плавной анимации. Расход заряда выше; Android может снизить её при перегреве или энергосбережении.</string>
-    <!-- MEETUBE(nav lens, issue #46) -->
+    <!-- HINDYOU(nav lens, issue #46) -->
     <string name="mobile_settings_tab_motion">Анимация переключения вкладок</string>
     <string name="mobile_settings_tab_motion_summary">Стеклянный блик скользит к вкладке, панель покачивается. На медленных телефонах выключено по умолчанию.</string>
-    <!-- MEETUBE(bar reset) -->
+    <!-- HINDYOU(bar reset) -->
     <string name="mobile_settings_tabs_reset">Сбросить панель к настройкам по умолчанию</string>
     <string name="mobile_settings_tabs_reset_summary">Главная, Shorts, Поиск, Подписки, Вы</string>
-    <!-- MEETUBE(list layout, issue #82) -->
+    <!-- HINDYOU(list layout, issue #82) -->
     <string name="mobile_settings_video_layout">Макет видео</string>
     <string name="mobile_settings_video_layout_cards">Карточки</string>
     <string name="mobile_settings_video_layout_cards_desc">Большая миниатюра для каждого видео</string>
@@ -244,10 +244,10 @@
     <string name="mobile_settings_video_layout_list_desc">Небольшая миниатюра рядом с названием; на экране помещается больше видео</string>
 
     <!-- Playback -->
-    <!-- MEETUBE(background): the battery-optimization exemption row (Playback). -->
+    <!-- HINDYOU(background): the battery-optimization exemption row (Playback). -->
     <string name="mobile_settings_screen_off">Продолжать воспроизведение при выключенном экране</string>
     <string name="mobile_settings_screen_off_on">Разрешено: режим энергосбережения не будет останавливать звук</string>
-    <string name="mobile_settings_screen_off_off">Режим энергосбережения может остановить звук. Нажмите, чтобы разрешить MeeTube работать в фоне</string>
+    <string name="mobile_settings_screen_off_off">Режим энергосбережения может остановить звук. Нажмите, чтобы разрешить HindYou работать в фоне</string>
     <string name="mobile_settings_auto_pip">Картинка в картинке</string>
     <string name="mobile_settings_auto_pip_summary">При выходе видео сворачивается в небольшое окно. При выключении функции в фоне остаётся только звук.</string>
     <string name="mobile_settings_video_ends">Когда видео закончится</string>
@@ -266,7 +266,7 @@
     <string name="mobile_settings_remember_speed_video">Для каждого видео</string>
     <string name="mobile_settings_remember_speed_all">Одинаковая для всех видео</string>
     <string name="mobile_settings_remember_speed_none">Не запоминать</string>
-    <string name="mobile_settings_remember_speed_none_desc">При каждом запуске MeeTube скорость сбрасывается до 1×</string>
+    <string name="mobile_settings_remember_speed_none_desc">При каждом запуске HindYou скорость сбрасывается до 1×</string>
     <string name="mobile_settings_speed_list">Скорости в разделе «Другие скорости»</string>
     <string name="mobile_settings_speed_list_basic">Краткий список</string>
     <string name="mobile_settings_speed_list_fine">Точные шаги</string>
@@ -295,11 +295,11 @@
     <!-- Video quality -->
     <string name="mobile_settings_quality_intro">Качество, с которого запускаются видео. Для отдельного видео его можно изменить в настройках плеера.</string>
     <string name="mobile_settings_default_quality">Качество по умолчанию</string>
-    <!-- MEETUBE(quality-network): one default per network; "%1$s" are the two picks' labels. -->
+    <!-- HINDYOU(quality-network): one default per network; "%1$s" are the two picks' labels. -->
     <string name="mobile_settings_quality_wifi">По Wi-Fi</string>
     <string name="mobile_settings_quality_mobile">По мобильной сети</string>
     <string name="mobile_settings_quality_same">Как по Wi-Fi</string>
-    <!-- MEETUBE(shorts-quality): issue #26. -->
+    <!-- HINDYOU(shorts-quality): issue #26. -->
     <string name="mobile_settings_quality_shorts">Shorts</string>
     <string name="mobile_settings_quality_both">Wi-Fi: %1$s · Мобильная сеть: %2$s</string>
     <string name="mobile_settings_quality_auto">Авто (до %1$dp)</string>
@@ -313,7 +313,7 @@
     <string name="mobile_settings_loudness">Выравнивать громкость</string>
     <string name="mobile_settings_loudness_summary">Снижает громкость слишком громких видео до обычного уровня YouTube</string>
     <string name="mobile_settings_player_volume">Громкость плеера</string>
-    <string name="mobile_settings_quality_data_saver_note">При системной экономии трафика MeeTube уменьшает буфер в мобильной сети.</string>
+    <string name="mobile_settings_quality_data_saver_note">При системной экономии трафика HindYou уменьшает буфер в мобильной сети.</string>
 
     <!-- Captions -->
     <string name="mobile_settings_caption_style">Стиль</string>
@@ -343,7 +343,7 @@
     <string name="mobile_settings_dearrow_note">DeArrow получает идентификаторы видео, которые вы видите в списках.</string>
 
     <!-- Advanced -->
-    <string name="mobile_settings_advanced_note">Меняют способ передачи видео и подключения MeeTube. Обычно не нужны.</string>
+    <string name="mobile_settings_advanced_note">Меняют способ передачи видео и подключения HindYou. Обычно не нужны.</string>
     <string name="mobile_settings_streaming">Потоковое воспроизведение</string>
     <string name="mobile_settings_buffer">Размер буфера</string>
     <string name="mobile_settings_buffer_low_desc">Буфер примерно на 25 секунд вперёд. Минимальный расход памяти.</string>
@@ -374,7 +374,7 @@
     <string name="mobile_settings_chapter_popup_summary">Показывает название каждой главы при её начале. Нажмите, чтобы перейти к следующей</string>
     <string name="mobile_settings_network">Сеть и подключение</string>
     <string name="mobile_settings_proxy">Прокси-сервер</string>
-    <string name="mobile_settings_proxy_summary">Направляет сетевые запросы MeeTube через HTTP- или SOCKS-прокси.</string>
+    <string name="mobile_settings_proxy_summary">Направляет сетевые запросы HindYou через HTTP- или SOCKS-прокси.</string>
     <string name="mobile_settings_dns">DNS для YouTube</string>
     <string name="mobile_settings_dns_ipv4">В первую очередь IPv4</string>
     <string name="mobile_settings_dns_ipv4_desc">Режим по умолчанию. Помогает в сетях, где IPv6 работает с ошибками.</string>
@@ -391,7 +391,7 @@
     <!-- About -->
     <string name="mobile_settings_version">Версия</string>
     <string name="mobile_settings_update_notify_summary">Сообщает о выходе новой версии, даже когда приложение закрыто</string>
-    <!-- MEETUBE(customize): the Customization page's groups and its tiles' short names -->
+    <!-- HINDYOU(customize): the Customization page's groups and its tiles' short names -->
     <string name="mobile_settings_customize_look">Внешний вид</string>
     <string name="mobile_settings_customize_layout">Макет</string>
     <string name="mobile_settings_customize_effects">Эффекты и отклик</string>
@@ -403,7 +403,7 @@
     <string name="mobile_settings_playlists_style_grid_short">Плейлисты</string>
     <string name="mobile_settings_playlists_style_rows_short">Видео</string>
     <string name="mobile_settings_interface_size_sample">Так выглядит название видео при этом размере</string>
-    <string name="mobile_settings_interface_size_sample_meta">MeeTube · 1,2 млн просмотров · 2 дня назад</string>
+    <string name="mobile_settings_interface_size_sample_meta">HindYou · 1,2 млн просмотров · 2 дня назад</string>
     <string name="mobile_settings_tab_glow">Свечение вкладки</string>
     <string name="mobile_settings_tab_glow_white">Белое</string>
     <string name="mobile_settings_tab_glow_white_desc">Обычное белое свечение (серое в светлой теме)</string>
@@ -412,7 +412,7 @@
     <string name="mobile_settings_tab_glow_tabs">Цвета вкладок</string>
     <string name="mobile_settings_tab_glow_tabs_desc">Каждая вкладка светится своим цветом</string>
     <string name="mobile_settings_tab_glow_accent">Акцентный цвет</string>
-    <string name="mobile_settings_tab_glow_accent_desc">Каждая вкладка светится красным цветом MeeTube</string>
+    <string name="mobile_settings_tab_glow_accent_desc">Каждая вкладка светится красным цветом HindYou</string>
     <string name="mobile_settings_tab_glow_off">Выкл.</string>
     <string name="mobile_settings_progress_glow">Свечение прогресса</string>
     <string name="mobile_settings_progress_glow_summary">Мягкое свечение на конце шкалы перемотки и полосы просмотренной части видео</string>
@@ -427,29 +427,29 @@
     <string name="mobile_settings_watched_bar_summary">Показывает под миниатюрой, какую часть видео вы посмотрели</string>
     <string name="mobile_settings_refresh_sound">Звук обновления</string>
     <string name="mobile_settings_refresh_sound_summary">Тихий щелчок, когда вы тянете страницу вниз, чтобы обновить её.</string>
-    <!-- MEETUBE(settings-transfer): Backup > Share or move your settings. -->
+    <!-- HINDYOU(settings-transfer): Backup > Share or move your settings. -->
     <string name="mobile_settings_transfer">Поделиться настройками или перенести их</string>
     <string name="mobile_settings_transfer_export">Сохранить настройки в файл</string>
     <string name="mobile_settings_transfer_export_summary">Оставить на будущее или перенести на другой телефон</string>
     <string name="mobile_settings_transfer_share">Поделиться настройками с другом</string>
     <string name="mobile_settings_transfer_share_summary">Отправить файл настроек в чате или по почте</string>
-    <string name="mobile_settings_transfer_share_text">Мои настройки MeeTube. В MeeTube: Настройки &gt; Резервное копирование &gt; Импорт настроек из файла</string>
+    <string name="mobile_settings_transfer_share_text">Мои настройки HindYou. В HindYou: Настройки &gt; Резервное копирование &gt; Импорт настроек из файла</string>
     <string name="mobile_settings_transfer_import">Импортировать настройки из файла</string>
     <string name="mobile_settings_transfer_import_summary">Загрузить файл настроек, который вы сохранили или получили от друга</string>
-    <string name="mobile_settings_transfer_import_confirm">Настройки будут заменены данными из файла, а MeeTube перезапустится. Аккаунты, история просмотров, загрузки и пароли останутся без изменений.</string>
+    <string name="mobile_settings_transfer_import_confirm">Настройки будут заменены данными из файла, а HindYou перезапустится. Аккаунты, история просмотров, загрузки и пароли останутся без изменений.</string>
     <string name="mobile_settings_transfer_import_button">Импортировать</string>
     <string name="mobile_settings_transfer_saved">Настройки сохранены</string>
-    <string name="mobile_settings_transfer_imported">Настройки импортированы. MeeTube перезапускается</string>
+    <string name="mobile_settings_transfer_imported">Настройки импортированы. HindYou перезапускается</string>
     <string name="mobile_settings_transfer_failed">Не удалось сохранить файл настроек</string>
-    <string name="mobile_settings_transfer_not_settings">Это не файл настроек MeeTube</string>
-    <!-- MEETUBE(issue #177): phone player audio. -->
+    <string name="mobile_settings_transfer_not_settings">Это не файл настроек HindYou</string>
+    <!-- HINDYOU(issue #177): phone player audio. -->
     <string name="mobile_settings_stable_volume">Стабильная громкость</string>
     <string name="mobile_settings_stable_volume_summary">Позволяет смягчать перепады громкости в сжатом аудио YouTube. Применяется к следующему открытому видео</string>
     <string name="mobile_settings_audio_language">Язык аудио</string>
     <string name="mobile_settings_audio_language_original">Оригинал</string>
     <string name="mobile_settings_audio_language_original_desc">Собственный язык видео</string>
     <string name="mobile_settings_audio_language_app">Язык приложения</string>
-    <string name="mobile_settings_audio_language_app_desc">Настройка «Язык» в MeeTube или языки Android, если она следует системе</string>
+    <string name="mobile_settings_audio_language_app_desc">Настройка «Язык» в HindYou или языки Android, если она следует системе</string>
     <string name="mobile_settings_audio_language_system">Языки системы</string>
     <string name="mobile_settings_audio_language_system_desc">Предпочитаемые языки Android, по порядку</string>
     <string name="mobile_settings_auto_dubs">Автодубляж</string>
@@ -459,7 +459,7 @@
     <string name="mobile_settings_equalizer_custom">Пользовательский</string>
     <string name="mobile_settings_equalizer_reset">Сбросить</string>
     <string name="mobile_settings_equalizer_unavailable">Эквалайзер недоступен на этом устройстве</string>
-    <!-- Russian translations for the latest MeeTube additions. -->
+    <!-- Russian translations for the latest HindYou additions. -->
     <string name="mobile_settings_downloads_summary">Папка, качество, автозагрузка</string>
     <string name="mobile_settings_download_quality">Качество загрузки</string>
     <string name="mobile_settings_download_ask">Спрашивать каждый раз</string>
@@ -528,7 +528,7 @@
     <string name="mobile_settings_coffee_scan">Или отсканируйте QR-код другим телефоном</string>
     <string name="mobile_settings_coffee_footer">Это необязательно. Звезда ⭐ на GitHub поможет не меньше ❤️</string>
     <string name="mobile_settings_tv_title">Установить на телевизор</string>
-    <string name="mobile_settings_tv_summary">Установите MeeTube TV на Android TV с этого телефона</string>
+    <string name="mobile_settings_tv_summary">Установите HindYou TV на Android TV с этого телефона</string>
     <string name="mobile_settings_tv_android">Google TV / Android TV</string>
     <string name="mobile_settings_tv_fire">Fire TV</string>
     <string name="mobile_settings_tv_step_one">1</string>
@@ -550,19 +550,19 @@
     <string name="mobile_settings_tv_ip">IP-адрес телевизора</string>
     <string name="mobile_settings_tv_ip_invalid">Введите IPv4-адрес телевизора, например %1$s</string>
     <string name="mobile_settings_tv_install">Установить</string>
-    <string name="mobile_settings_tv_install_button">Установить MeeTube TV</string>
+    <string name="mobile_settings_tv_install_button">Установить HindYou TV</string>
     <string name="mobile_settings_tv_connecting">Подключение к %1$s… Подтвердите запрос на ТВ и включите «Всегда разрешать».</string>
-    <string name="mobile_settings_tv_finding_release">Поиск последней версии MeeTube TV…</string>
-    <string name="mobile_settings_tv_downloading">Загрузка MeeTube TV %1$s… %2$s%%</string>
-    <string name="mobile_settings_tv_downloading_unknown">Загрузка MeeTube TV %1$s…</string>
+    <string name="mobile_settings_tv_finding_release">Поиск последней версии HindYou TV…</string>
+    <string name="mobile_settings_tv_downloading">Загрузка HindYou TV %1$s… %2$s%%</string>
+    <string name="mobile_settings_tv_downloading_unknown">Загрузка HindYou TV %1$s…</string>
     <string name="mobile_settings_tv_installing">Установка на телевизор…</string>
-    <string name="mobile_settings_tv_done">Готово! MeeTube TV уже запущено на телевизоре 🎉</string>
+    <string name="mobile_settings_tv_done">Готово! HindYou TV уже запущено на телевизоре 🎉</string>
     <string name="mobile_settings_tv_unreachable">Нет связи с ТВ. Проверьте отладку (шаг 2) и IP-адрес.</string>
     <string name="mobile_settings_tv_auth_failed">Телевизор не разрешил подключение. Повторите попытку и нажмите «Разрешить» на телевизоре.</string>
-    <string name="mobile_settings_tv_download_failed">Не удалось скачать MeeTube TV. Проверьте подключение к интернету.</string>
+    <string name="mobile_settings_tv_download_failed">Не удалось скачать HindYou TV. Проверьте подключение к интернету.</string>
     <string name="mobile_settings_tv_install_failed">Не удалось установить приложение на телевизор: %1$s</string>
     <string name="mobile_settings_tv_unknown_error">Неизвестная ошибка</string>
-    <string name="mobile_settings_tv_launch_failed">MeeTube TV установлено. Запустите его из списка приложений на телевизоре.</string>
+    <string name="mobile_settings_tv_launch_failed">HindYou TV установлено. Запустите его из списка приложений на телевизоре.</string>
     <string name="mobile_settings_tv_busy">Установка уже выполняется. Попробуйте ещё раз чуть позже.</string>
     <string name="mobile_settings_tv_permission">Разрешите доступ к локальной сети, чтобы найти телевизор и подключиться к нему.</string>
     <string name="mobile_settings_tv_footer">После установки отладку на телевизоре можно отключить.</string>
@@ -590,7 +590,7 @@
     <string name="mobile_settings_segment_modes_note">Можно пропустить фрагмент, подтвердить пропуск кнопкой, показать его только на шкале или отключить функцию.</string>
     <string name="mobile_settings_segment_show">Показать</string>
     <string name="mobile_settings_storage">Хранилище</string>
-    <string name="mobile_settings_storage_app">Занято MeeTube</string>
+    <string name="mobile_settings_storage_app">Занято HindYou</string>
     <string name="mobile_settings_storage_app_size">Приложение</string>
     <string name="mobile_settings_storage_cache">Кэш видео и изображений</string>
     <string name="mobile_settings_storage_clear">Очистить кэш</string>
@@ -617,7 +617,7 @@
     <string name="mobile_web_signin_optional">Необязательно. Нужно для отправки сообщений в чат трансляции</string>
     <string name="mobile_web_signin_setting">Вход через сайт YouTube</string>
     <string name="mobile_web_signin_signed_as">Вход выполнен: %1$s</string>
-<!-- Newer MeeTube settings -->
+<!-- Newer HindYou settings -->
     <string name="mobile_settings_battery">Энергосбережение</string>
     <string name="mobile_settings_battery_manual">Ручной режим энергосбережения</string>
     <string name="mobile_settings_battery_manual_summary">Эффекты будут отключены независимо от того, включено ли энергосбережение на телефоне.</string>
@@ -627,7 +627,7 @@
     <string name="mobile_settings_battery_light_desc">Анимация отключена, вместо матового размытия используется обычное стекло</string>
     <string name="mobile_settings_battery_keep">Оставить эффекты</string>
     <string name="mobile_settings_battery_keep_desc">Всё будет выглядеть и работать как обычно</string>
-    <string name="mobile_settings_battery_note">Анимация, матовое стекло и жидкая линза часто перерисовывают экран. При включённом энергосбережении MeeTube может отключать их для экономии заряда. После его выключения эффекты вернутся.</string>
+    <string name="mobile_settings_battery_note">Анимация, матовое стекло и жидкая линза часто перерисовывают экран. При включённом энергосбережении HindYou может отключать их для экономии заряда. После его выключения эффекты вернутся.</string>
     <string name="mobile_battery_saver_ask">Включено энергосбережение. Отключить анимацию и матовое стекло на это время?</string>
     <string name="mobile_battery_saver_ask_action">Отключить</string>
     <string name="mobile_settings_new_uploads">Уведомлять о новых видео</string>
@@ -657,13 +657,13 @@
         <item quantity="other">Уведомления отключены для %d каналов</item>
     </plurals>
     <string name="mobile_settings_notify_no_channels">Сначала войдите в аккаунт или подпишитесь на канал</string>
-    <string name="mobile_settings_notify_reliable">Когда MeeTube закрыто</string>
+    <string name="mobile_settings_notify_reliable">Когда HindYou закрыто</string>
     <string name="mobile_settings_notify_background">Работа в фоновом режиме</string>
-    <string name="mobile_settings_notify_background_on">Разрешено: проверки продолжаются, даже когда MeeTube закрыто</string>
-    <string name="mobile_settings_notify_background_off">Нет фонового доступа: телефон может останавливать проверки при закрытом MeeTube. Нажмите, чтобы разрешить.</string>
+    <string name="mobile_settings_notify_background_on">Разрешено: проверки продолжаются, даже когда HindYou закрыто</string>
+    <string name="mobile_settings_notify_background_off">Нет фонового доступа: телефон может останавливать проверки при закрытом HindYou. Нажмите, чтобы разрешить.</string>
     <string name="mobile_settings_notify_system">Звук и оформление</string>
-    <string name="mobile_settings_notify_system_summary">Настройки уведомлений MeeTube на этом телефоне</string>
-    <string name="mobile_settings_notify_note">Новые видео проверяются по расписанию, не через push (Android — не чаще раза в 15 минут). Некоторые телефоны блокируют фоновые проверки. Разрешите MeeTube работу в фоне выше.</string>
+    <string name="mobile_settings_notify_system_summary">Настройки уведомлений HindYou на этом телефоне</string>
+    <string name="mobile_settings_notify_note">Новые видео проверяются по расписанию, не через push (Android — не чаще раза в 15 минут). Некоторые телефоны блокируют фоновые проверки. Разрешите HindYou работу в фоне выше.</string>
     <string name="mobile_app_icon_red_crt">Красный кинескоп</string>
     <string name="mobile_app_icon_chrome">Chrome Play</string>
     <string name="mobile_app_icon_pixel_play">Pixel Play</string>

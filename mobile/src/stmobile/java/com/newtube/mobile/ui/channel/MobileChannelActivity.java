@@ -3,6 +3,9 @@ package com.newtube.mobile.ui.channel;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,6 +16,7 @@ import android.view.ViewConfiguration;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +27,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+import com.liskovsoft.googlecommon.service.oauth.YouTubeAccount;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadFailure;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInService;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.newtube.mobile.ui.browse.VideoCardAdapter;
 import com.newtube.mobile.ui.common.FilteredPageTopUp;
@@ -46,6 +53,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * Touch Channel page (Wave 4a; tabbed 2026-07-09).
@@ -66,6 +74,7 @@ import java.util.Map;
 public class MobileChannelActivity extends MobileActivity
         implements ChannelView, MiniPlayerBridge.MiniHost {
     private static final int SCROLL_END_THRESHOLD_ITEMS = 6;
+    private static final String PROFILE_POSTS_TAB = "profile-posts";
 
     /** A channel section, keyed by its {@link VideoGroup#getId()} so continuations/replacements
      *  for the same row merge into it instead of creating a duplicate tab. */
@@ -139,6 +148,7 @@ public class MobileChannelActivity extends MobileActivity
     private boolean mSuppressTabCallback;
     /** NEWTUBE(shorts): onDestroy has begun - the presenter's teardown must not page on. */
     private boolean mTornDown;
+    private boolean mOwnChannel;
     /** The neighbouring tab's cards, slid in beside the grid during a sideways swipe. */
     private RecyclerView mPeek;
     private VideoCardAdapter mPeekAdapter;
@@ -281,10 +291,55 @@ public class MobileChannelActivity extends MobileActivity
             mTitleFromCard = true;
             mTitleView.setText(info.title);
         }
+        boolean ownChannel = isSignedInChannel(info.handle);
+        if (mOwnChannel != ownChannel) {
+            mOwnChannel = ownChannel;
+            rebuildTabs();
+        }
+        View ownerActions = findViewById(R.id.mobile_channel_owner_actions);
+        ownerActions.setVisibility(ownChannel ? View.VISIBLE : View.GONE);
+        if (ownChannel) {
+            findViewById(R.id.mobile_channel_analytics).setOnClickListener(v ->
+                    openStudio(channelId, "analytics/tab-overview/period-default"));
+            findViewById(R.id.mobile_channel_edit).setOnClickListener(v ->
+                    openStudio(channelId, "editing/profile"));
+        }
         if (header.getVisibility() != View.VISIBLE) {
             header.setVisibility(View.VISIBLE);
             header.setAlpha(0f);
             header.animate().alpha(1f).setDuration(220).start();
+        }
+    }
+
+    private boolean isSignedInChannel(@Nullable String handle) {
+        if (handle == null) {
+            return false;
+        }
+        Account account = YouTubeSignInService.instance().getSelectedAccount();
+        if (!(account instanceof YouTubeAccount)) {
+            return false;
+        }
+        String accountHandle = ((YouTubeAccount) account).getChannelName();
+        return normalizeHandle(handle).equals(normalizeHandle(accountHandle));
+    }
+
+    private static String normalizeHandle(@Nullable String handle) {
+        if (handle == null) {
+            return "";
+        }
+        String value = handle.trim();
+        if (value.startsWith("@")) {
+            value = value.substring(1);
+        }
+        return value.toLowerCase(Locale.ROOT);
+    }
+
+    private void openStudio(String channelId, String path) {
+        Uri uri = Uri.parse("https://studio.youtube.com/channel/" + Uri.encode(channelId) + "/" + path);
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.mobile_no_browser, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -571,7 +626,15 @@ public class MobileChannelActivity extends MobileActivity
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (mSuppressTabCallback || !(tab.getTag() instanceof Integer)) {
+                if (mSuppressTabCallback) {
+                    return;
+                }
+                if (PROFILE_POSTS_TAB.equals(tab.getTag())) {
+                    MobileChannelPostsActivity.open(MobileChannelActivity.this,
+                            sortChannelId(), mTitleView.getText().toString());
+                    return;
+                }
+                if (!(tab.getTag() instanceof Integer)) {
                     return;
                 }
                 Section leaving = mSections.get(mActiveSectionId);
@@ -594,7 +657,12 @@ public class MobileChannelActivity extends MobileActivity
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                mGrid.scrollToPosition(0);
+                if (PROFILE_POSTS_TAB.equals(tab.getTag())) {
+                    MobileChannelPostsActivity.open(MobileChannelActivity.this,
+                            sortChannelId(), mTitleView.getText().toString());
+                } else {
+                    mGrid.scrollToPosition(0);
+                }
             }
         });
         setupTabSwipe();
@@ -1046,6 +1114,9 @@ public class MobileChannelActivity extends MobileActivity
             String title = section.title != null && !section.title.isEmpty() ? section.title
                     : getString(ChannelTabShortcuts.isShortcutRow(section.videos) // NEWTUBE(#63)
                             ? R.string.mobile_channel_tab_more : R.string.mobile_channel_tab_videos);
+            if (mOwnChannel && index == 0) {
+                title = getString(R.string.mobile_channel_tab_home);
+            }
 
             TabLayout.Tab tab = index < mTabs.getTabCount() ? mTabs.getTabAt(index) : null;
             if (tab == null) {
@@ -1064,12 +1135,23 @@ public class MobileChannelActivity extends MobileActivity
             }
             index++;
         }
-        while (mTabs.getTabCount() > mSections.size()) {
+        if (mOwnChannel) {
+            TabLayout.Tab posts = index < mTabs.getTabCount() ? mTabs.getTabAt(index) : null;
+            if (posts == null) {
+                posts = mTabs.newTab();
+                mTabs.addTab(posts, false);
+            }
+            posts.setTag(PROFILE_POSTS_TAB);
+            posts.setText(getString(R.string.mobile_channel_tab_posts));
+            index++;
+        }
+        while (mTabs.getTabCount() > index) {
             mTabs.removeTabAt(mTabs.getTabCount() - 1);
         }
 
         // Tab bar only earns its space with 2+ sections; a single section shows as a plain feed.
-        mTabs.setVisibility(mSections.size() > 1 ? View.VISIBLE : View.GONE);
+        mTabs.setVisibility(mSections.size() > 1 || (mOwnChannel && !mSections.isEmpty())
+                ? View.VISIBLE : View.GONE);
         mTabsSpace.setVisibility(mTabs.getVisibility());
 
         mSuppressTabCallback = false;
