@@ -1,11 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSimpleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
@@ -19,7 +16,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteContr
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,14 +73,6 @@ public class AppDataSourceManager {
                 context.getString(R.string.dearrow_provider), () -> DeArrowSettingsPresenter.instance(context).show(), R.drawable.settings_dearrow));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.app_backup_restore), () -> BackupSettingsPresenter.instance(context).show(), R.drawable.settings_backup));
-
-        if (Helpers.equalsAny(context.getPackageName(), Utils.KNOWN_PACKAGES)) {
-            settingItems.add(new SettingsItem(
-                    context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
-        } else {
-            settingItems.add(new SettingsItem(
-                    context.getString(R.string.settings_about), () -> AboutSimpleSettingsPresenter.instance(context).show(), R.drawable.settings_about));
-        }
 
         return settingItems;
     }
